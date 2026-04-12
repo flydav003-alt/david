@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>金融分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Syncopate:wght@400;700&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root{
+  --bg:        #05070a;
+  --gold-hi:   #f7d67a;
+  --gold-mid:  #c9943a;
+  --cyan:      #38efff;
+  --rose:      #ff4d8d;
+  --lime:      #a3ff6e;
+  --border:    rgba(255,255,255,0.06);
+  --mute:      rgba(255,255,255,0.28);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:#ddd;
+  font-family:'Rajdhani',sans-serif;font-weight:300;
+  min-height:100vh;overflow-x:hidden;
+}
+
+/* ══════════════════════════════════════
+   BACKGROUND LAYERS
+   canvas is z:20 — above cards, pointer-events:none so clicks pass through
+══════════════════════════════════════ */
+canvas#bg{
+  position:fixed;inset:0;
+  z-index:20;          /* ← above cards, below header */
+  pointer-events:none;
+}
+
+/* scanlines */
+.scanlines{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,transparent 2px,
+    rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px
+  );
+  opacity:.55;
+}
+/* film grain */
+.grain{
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+/* vignette */
+.vignette{
+  position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.7) 100%);
+}
+
+/* ══════════════════════════════════════
+   APP — no explicit z-index so stacking context stays flat
+══════════════════════════════════════ */
+#app{position:relative;display:flex;flex-direction:column;min-height:100vh;}
+
+/* ══════════════════════════════════════
+   HEADER — z:50 floats above canvas bubbles
+══════════════════════════════════════ */
+header{
+  padding:1.3rem 2.8rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(5,7,10,0.82);
+  backdrop-filter:blur(22px);
+  position:sticky;top:0;z-index:50;
+  animation:fadeDown .7s .1s ease both;
+}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+
+.logo-wrap{display:flex;align-items:center;gap:.9rem;}
+.logo-line{width:2px;height:26px;background:linear-gradient(to bottom,transparent,var(--gold-hi),transparent);}
+.logo{
+  font-family:'Cinzel Decorative',serif;
+  font-weight:700;font-size:.78rem;letter-spacing:.22em;
+  background:linear-gradient(135deg,var(--gold-hi) 0%,var(--gold-mid) 55%,var(--gold-hi) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.header-tag{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.55rem;letter-spacing:.18em;color:var(--mute);
+}
+
+/* ══════════════════════════════════════
+   MAIN
+══════════════════════════════════════ */
+main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%;}
+
+/* ── Section head ── */
+.sec-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:2.8rem;padding-bottom:1.6rem;padding-top:.6rem;   /* fix clip */
+  border-bottom:1px solid var(--border);position:relative;
+  overflow:visible;   /* never clip ascenders */
+}
+.sec-head::after{
+  content:'';position:absolute;bottom:-1px;left:0;width:220px;height:1px;
+  background:linear-gradient(90deg,var(--gold-mid),transparent);
+}
+
+.sec-title{
+  font-family:'Noto Serif TC','Syncopate',sans-serif;
+  font-weight:900;font-size:clamp(1.6rem,3.5vw,2.7rem);
+  line-height:1.25;letter-spacing:.08em;
+  overflow:visible;
+}
+.t-gold{
+  background:linear-gradient(135deg,var(--gold-hi),var(--gold-mid) 55%,var(--gold-hi));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+}
+.t-ghost{
+  font-family:'Syncopate',sans-serif;
+  font-weight:700;
+  -webkit-text-stroke:1px rgba(255,255,255,0.13);
+  -webkit-text-fill-color:transparent;
+  display:block;margin-top:.2em;
+  font-size:.42em;letter-spacing:.22em;
+  overflow:visible;
+}
+
+/* ── Clock block ── */
+.clock-block{text-align:right;line-height:1.15;flex-shrink:0;padding-left:1.5rem;}
+
+.clock-time{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(1.6rem,3.2vw,2.4rem);
+  letter-spacing:.12em;
+  background:linear-gradient(135deg,var(--cyan),rgba(56,239,255,.55));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+  animation:flicker 6s ease infinite;
+}
+@keyframes flicker{
+  0%,96%,100%{opacity:1;}
+  97%{opacity:.85;}
+  98%{opacity:1;}
+  99%{opacity:.9;}
+}
+
+/* Chinese date — Noto Serif TC for authentic rendering */
+.clock-date{
+  font-family:'Noto Serif TC',serif;
+  font-size:.75rem;font-weight:500;
+  letter-spacing:.14em;
+  color:rgba(56,239,255,.5);
+  display:block;margin-top:.35rem;
+}
+.clock-label{
+  font-family:'Rajdhani',sans-serif;
+  font-size:.5rem;letter-spacing:.3em;
+  color:var(--mute);text-transform:uppercase;
+  display:block;margin-top:.25rem;
+}
+
+/* ══════════════════════════════════════
+   GRID
+══════════════════════════════════════ */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+
+/* ══════════════════════════════════════
+   CARD BASE
+   z-index:1 so they sit above the base but below canvas (z:20).
+   Clicks pass through canvas because pointer-events:none is set there.
+══════════════════════════════════════ */
+.card{
+  position:relative;overflow:hidden;border-radius:3px;
+  border:1px solid rgba(255,255,255,0.07);
+  aspect-ratio:16/10;display:block;text-decoration:none;color:inherit;
+  cursor:pointer;isolation:isolate;z-index:1;
+  transition:transform .45s cubic-bezier(.23,1,.32,1),border-color .4s,box-shadow .4s;
+}
+.card:hover{transform:translateY(-6px) scale(1.013);}
+
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  opacity:0;transition:opacity .45s;z-index:6;
+}
+.card:hover::before{opacity:1;}
+
+.card::after{
+  content:'';position:absolute;top:-70%;left:-90%;
+  width:50%;height:240%;transform:skewX(-18deg);
+  transition:left .9s cubic-bezier(.23,1,.32,1);
+  pointer-events:none;z-index:7;
+}
+.card:hover::after{left:140%;}
+
+/* ── Card 1 · Cyan Grid ── */
+.card-1{
+  background:
+    linear-gradient(145deg,rgba(56,239,255,.07) 0%,transparent 50%,rgba(56,239,255,.03) 100%),
+    linear-gradient(rgba(56,239,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(56,239,255,.028) 1px,transparent 1px),
+    #060d10;
+  background-size:auto,28px 28px,28px 28px;
+  box-shadow:inset 0 0 120px rgba(56,239,255,.04);
+}
+.card-1:hover{border-color:rgba(56,239,255,.4);
+  box-shadow:0 24px 64px rgba(56,239,255,.15),inset 0 0 120px rgba(56,239,255,.08);}
+.card-1::before{background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.card-1::after{background:linear-gradient(105deg,transparent 20%,rgba(56,239,255,.08) 50%,transparent 80%);}
+.card-1 .ring{
+  position:absolute;top:-55px;right:-55px;z-index:1;
+  width:210px;height:210px;border-radius:50%;
+  border:1px solid rgba(56,239,255,.07);
+  box-shadow:0 0 0 28px rgba(56,239,255,.025),0 0 0 56px rgba(56,239,255,.012);
+  transition:transform 1.2s cubic-bezier(.23,1,.32,1),opacity .4s;opacity:.5;
+}
+.card-1:hover .ring{transform:scale(1.3);opacity:1;}
+
+/* ── Card 2 · Gold Honeycomb ── */
+.card-2{background:#09090a;box-shadow:inset 0 0 100px rgba(201,148,58,.06);}
+.card-2:hover{border-color:rgba(247,214,122,.42);
+  box-shadow:0 24px 64px rgba(201,148,58,.16),inset 0 0 100px rgba(201,148,58,.1);}
+.card-2::before{background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);}
+.card-2::after{background:linear-gradient(105deg,transparent 20%,rgba(247,214,122,.07) 50%,transparent 80%);}
+.card-2 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.14;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 70L2 54V22L30 6l28 16v32L30 70zm0 0v34M2 54l28 16M58 54L30 70' fill='none' stroke='%23c9943a' stroke-width='0.7'/%3E%3C/svg%3E");
+  background-size:60px 104px;transition:opacity .4s;
+}
+.card-2:hover .pat{opacity:.32;}
+.card-2 .orb{
+  position:absolute;bottom:-80px;left:-60px;z-index:1;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,148,58,.1) 0%,transparent 65%);
+  transition:transform 1s cubic-bezier(.23,1,.32,1);
+}
+.card-2:hover .orb{transform:scale(1.4) translate(14px,-14px);}
+
+/* ── Card 3 · Rose Radar ── */
+.card-3{
+  background:radial-gradient(ellipse at 70% 30%,rgba(255,77,141,.09) 0%,transparent 55%),#0a0608;
+  box-shadow:inset 0 0 100px rgba(255,77,141,.05);}
+.card-3:hover{border-color:rgba(255,77,141,.42);
+  box-shadow:0 24px 64px rgba(255,77,141,.15),inset 0 0 100px rgba(255,77,141,.09);}
+.card-3::before{background:linear-gradient(90deg,transparent,var(--rose),transparent);}
+.card-3::after{background:linear-gradient(105deg,transparent 20%,rgba(255,77,141,.07) 50%,transparent 80%);}
+.card-3 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='25' fill='none' stroke='%23ff4d8d' stroke-width='.6'/%3E%3Ccircle cx='100' cy='100' r='50' fill='none' stroke='%23ff4d8d' stroke-width='.6'/%3E%3Ccircle cx='100' cy='100' r='75' fill='none' stroke='%23ff4d8d' stroke-width='.6'/%3E%3Ccircle cx='100' cy='100' r='100' fill='none' stroke='%23ff4d8d' stroke-width='.6'/%3E%3Ccircle cx='100' cy='100' r='125' fill='none' stroke='%23ff4d8d' stroke-width='.6'/%3E%3Cline x1='0' y1='100' x2='200' y2='100' stroke='%23ff4d8d' stroke-width='.3' opacity='.4'/%3E%3Cline x1='100' y1='0' x2='100' y2='200' stroke='%23ff4d8d' stroke-width='.3' opacity='.4'/%3E%3C/svg%3E");
+  background-size:200px 200px;background-position:70% 30%;transition:opacity .4s;
+}
+.card-3:hover .pat{opacity:.26;}
+
+/* ── Card 4 · Lime Matrix ── */
+.card-4{
+  background:linear-gradient(225deg,rgba(163,255,110,.08) 0%,transparent 50%),#070a06;
+  box-shadow:inset 0 0 100px rgba(163,255,110,.04);}
+.card-4:hover{border-color:rgba(163,255,110,.42);
+  box-shadow:0 24px 64px rgba(163,255,110,.13),inset 0 0 100px rgba(163,255,110,.09);}
+.card-4::before{background:linear-gradient(90deg,transparent,var(--lime),transparent);}
+.card-4::after{background:linear-gradient(105deg,transparent 20%,rgba(163,255,110,.07) 50%,transparent 80%);}
+.card-4 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.08;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(163,255,110,.8) 0px,rgba(163,255,110,.8) 1px,transparent 1px,transparent 20px),
+    repeating-linear-gradient(-45deg,rgba(163,255,110,.4) 0px,rgba(163,255,110,.4) 1px,transparent 1px,transparent 20px);
+  transition:opacity .4s;
+}
+.card-4:hover .pat{opacity:.2;}
+.card-4 .tri{
+  position:absolute;top:0;right:0;z-index:2;width:0;height:0;
+  border-style:solid;border-width:0 72px 72px 0;
+  border-color:transparent rgba(163,255,110,.06) transparent transparent;
+  transition:border-color .4s;
+}
+.card-4:hover .tri{border-color:transparent rgba(163,255,110,.18) transparent transparent;}
+
+/* ══════════════════════════════════════
+   CARD OVERLAY
+══════════════════════════════════════ */
+.card-overlay{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:1.5rem 1.7rem 1.4rem;
+  background:linear-gradient(to top,rgba(5,7,10,.93) 0%,rgba(5,7,10,.5) 38%,rgba(5,7,10,.08) 65%,transparent 100%);
+}
+
+/* corner brackets */
+.cor{
+  position:absolute;width:15px;height:15px;z-index:6;border-style:solid;
+  transition:width .4s cubic-bezier(.23,1,.32,1),height .4s cubic-bezier(.23,1,.32,1),
+             border-color .4s,opacity .4s;opacity:.4;
+}
+.card:hover .cor{width:22px;height:22px;opacity:1;}
+.c-tl{top:11px;left:11px;border-width:1px 0 0 1px;}
+.c-br{bottom:11px;right:11px;border-width:0 1px 1px 0;}
+.card-1 .cor{border-color:rgba(56,239,255,.3);}   .card-1:hover .cor{border-color:rgba(56,239,255,1);}
+.card-2 .cor{border-color:rgba(247,214,122,.3);} .card-2:hover .cor{border-color:rgba(247,214,122,1);}
+.card-3 .cor{border-color:rgba(255,77,141,.3);}  .card-3:hover .cor{border-color:rgba(255,77,141,1);}
+.card-4 .cor{border-color:rgba(163,255,110,.3);} .card-4:hover .cor{border-color:rgba(163,255,110,1);}
+
+.card-num{
+  position:absolute;top:13px;right:15px;z-index:6;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.52rem;letter-spacing:.3em;
+  color:rgba(255,255,255,.12);transition:color .35s;
+}
+.card:hover .card-num{color:rgba(255,255,255,.35);}
+
+/* ──────────────────────────────────────
+   CARD TITLES — Noto Serif TC
+   Beautiful, strong Chinese + English rendering
+────────────────────────────────────── */
+.card-title{
+  font-family:'Noto Serif TC',serif;
+  font-weight:900;
+  font-size:clamp(1.84rem,3.8vw,2.56rem);
+  letter-spacing:.06em;line-height:1.3;
+  color:rgba(255,255,255,.92);
+  display:block;margin-bottom:.45rem;
+  transition:color .35s,text-shadow .4s;
+}
+.card-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(1.2rem,1.9vw,1.4rem);
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.28);display:block;
+  transition:color .35s,letter-spacing .4s;
+}
+
+/* hover colours */
+.card-1:hover .card-title{color:var(--cyan);
+  text-shadow:0 0 16px rgba(56,239,255,.8),0 0 45px rgba(56,239,255,.35);}
+.card-1:hover .card-sub{color:rgba(56,239,255,.65);letter-spacing:.16em;}
+
+.card-2:hover .card-title{color:var(--gold-hi);
+  text-shadow:0 0 16px rgba(247,214,122,.85),0 0 45px rgba(247,214,122,.4),0 0 90px rgba(247,214,122,.18);}
+.card-2:hover .card-sub{color:rgba(201,148,58,.82);letter-spacing:.16em;}
+
+.card-3:hover .card-title{color:#ff82b0;
+  text-shadow:0 0 16px rgba(255,77,141,.8),0 0 45px rgba(255,77,141,.35);}
+.card-3:hover .card-sub{color:rgba(255,77,141,.65);letter-spacing:.16em;}
+
+.card-4:hover .card-title{color:var(--lime);
+  text-shadow:0 0 16px rgba(163,255,110,.8),0 0 45px rgba(163,255,110,.35);}
+.card-4:hover .card-sub{color:rgba(163,255,110,.65);letter-spacing:.16em;}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 2.8rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,7,10,.5);
+}
+.foot{font-family:'Share Tech Mono',monospace;font-size:.55rem;
+  letter-spacing:.2em;color:rgba(255,255,255,.1);text-transform:uppercase;}
+.foot-logo{
+  font-family:'Cinzel Decorative',serif;font-size:.6rem;letter-spacing:.2em;
+  background:linear-gradient(90deg,var(--gold-mid),var(--gold-hi));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.38;
+  text-decoration:none;
+}
+
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(22px);
+  transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
+.reveal.up{opacity:1;transform:none;}
+.d1{transition-delay:.09s;}.d2{transition-delay:.18s;}.d3{transition-delay:.27s;}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:700px){
+  header{padding:1rem 1.2rem;}
+  main{padding:2.4rem 1.2rem 4rem;}
+  footer{padding:1.2rem 1.2rem;}
+  .grid{grid-template-columns:1fr;}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:1rem;}
+  .card{aspect-ratio:4/3;}
+  .header-tag{display:none;}
+  .clock-time{font-size:1.5rem;}
+}
+@media(max-width:380px){.card{aspect-ratio:3/2;}}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="scanlines"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<div id="app">
+
+  <!-- ══ HEADER ══ -->
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-line"></div>
+      <a href="#" class="logo">金融分析</a>
+    </div>
+    <span class="header-tag">Financial Systems · Active</span>
+  </header>
+
+  <!-- ══ MAIN ══ -->
+  <main>
+
+    <div class="sec-head reveal">
+      <h2 class="sec-title">
+        <span class="t-gold">選股</span>
+        <span class="t-ghost">Systems</span>
+      </h2>
+
+      <!-- 時鐘區塊 -->
+      <div class="clock-block">
+        <span class="clock-time" id="clk-time">00:00:00</span>
+        <span class="clock-date" id="clk-date">載入中</span>
+        <span class="clock-label">Taipei · GMT+8</span>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- 01 · 台股GOGOGO · 青藍方格 -->
+      <a class="card card-1 reveal d1"
+         href="https://flydav003-alt.github.io/twgogogo/"
+         target="_blank" rel="noopener">
+        <div class="ring"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 01 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">台股GOGOGO</span>
+          <span class="card-sub">台股 上市股票 短線操作</span>
+        </div>
+      </a>
+
+      <!-- 02 · 上櫃操盤手 · 金色蜂巢 -->
+      <a class="card card-2 reveal d2"
+         href="https://flydav003-alt.github.io/tw-otc/"
+         target="_blank" rel="noopener">
+        <div class="pat"></div><div class="orb"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 02 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">上櫃操盤手</span>
+          <span class="card-sub">台股 上櫃股票 短線操作</span>
+        </div>
+      </a>
+
+      <!-- 03 · 台股發發發 · 玫瑰同心圓 -->
+      <a class="card card-3 reveal d2"
+         href="https://flydav003-alt.github.io/tw888/"
+         target="_blank" rel="noopener">
+        <div class="pat"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 03 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">台股發發發</span>
+          <span class="card-sub">台股 上市股票 中長線操作</span>
+        </div>
+      </a>
+
+      <!-- 04 · Grok Elite Swing · 萊姆斜紋 -->
+      <a class="card card-4 reveal d3"
+         href="https://flydav003-alt.github.io/usstock/"
+         target="_blank" rel="noopener">
+        <div class="pat"></div><div class="tri"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 04 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">Grok Elite Swing</span>
+          <span class="card-sub">美股收盤後分析</span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <a href="#" class="foot-logo">金融分析</a>
+    <span class="foot">&copy; 2026 · All Systems Operational</span>
+  </footer>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   LIVE CLOCK — 繁體中文日期
+══════════════════════════════════════ */
+const MONTHS_ZH = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+const DAYS_ZH   = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+
+function numToChinese(n) {
+  const ones = ['','一','二','三','四','五','六','七','八','九'];
+  if (n < 10)  return ones[n];
+  if (n === 10) return '十';
+  if (n < 20)  return '十' + ones[n - 10];
+  if (n === 20) return '二十';
+  if (n < 30)  return '二十' + ones[n - 20];
+  if (n === 30) return '三十';
+  return '三十' + ones[n - 30];
+}
+
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clk-time').textContent = `${h}:${m}:${s}`;
+
+  const yr  = now.getFullYear();
+  const mon = MONTHS_ZH[now.getMonth()];
+  const day = numToChinese(now.getDate());
+  const dow = DAYS_ZH[now.getDay()];
+  // e.g. 2026年4月12日 星期六
+  const monNum  = now.getMonth() + 1;
+  const dateNum = now.getDate();
+  document.getElementById('clk-date').textContent = `${yr}年${monNum}月${dateNum}日　${dow}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('up'); io.unobserve(e.target); }
+  });
+}, { threshold:.04, rootMargin:'0px 0px -20px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════════
+   CANVAS BACKGROUND
+   canvas is z:20 (above cards, below header z:50)
+   pointer-events:none — all card clicks pass through
+══════════════════════════════════════ */
+(function () {
+  const cv  = document.getElementById('bg');
+  const ctx = cv.getContext('2d');
+  let W, H, t = 0;
+  const rz = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  rz(); window.addEventListener('resize', rz);
+
+  /* ── Floating particles — upward drift, cover full page including header ── */
+  function mkPt() {
+    const big = Math.random() < .12;
+    return {
+      x:  Math.random() * W,
+      y:  H + Math.random() * 200,
+      vx: (Math.random() - .5) * .25,
+      vy: -.18 - Math.random() * .55,
+      r:  big ? 2.5 + Math.random() * 3 : .4 + Math.random() * 1.4,
+      a:  big ? .06 + Math.random() * .10 : .015 + Math.random() * .055,
+      glow: big,
+      life: 0,
+      maxLife: 280 + Math.random() * 400,
+      c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e','#f7d67a','#ffffff'][Math.random() * 6 | 0],
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: (.5 + Math.random()) * .012,
+    };
+  }
+
+  /* Spread initial particles across full height so some are already mid-travel */
+  const pts = Array.from({ length: 130 }, () => {
+    const p = mkPt();
+    p.y = Math.random() * (H + 200) - 200;  // scatter from top to below screen
+    return p;
+  });
+
+  /* ── Data stream columns ── */
+  const NCOL = 22;
+  const streams = Array.from({ length: NCOL }, () => ({
+    x: Math.random() * 2200,
+    y: Math.random() * -600,
+    sp: .18 + Math.random() * .38,
+    op: .005 + Math.random() * .008,
+    len: 8 + (Math.random() * 10 | 0),
+    ch: Array.from({ length: 20 }, () =>
+      Math.random() < .45
+        ? (Math.random() * 9 | 0) + ''
+        : String.fromCharCode(0x30A0 + (Math.random() * 96 | 0))
+    ),
+    c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e'][Math.random() * 4 | 0],
+  }));
+
+  /* ── Nebula orbs (slow drift, covers whole page) ── */
+  const orbs = [
+    { x:.12, y:.22, r:420, c:'rgba(56,239,255,',  a:.018, fx:.00010 },
+    { x:.82, y:.68, r:360, c:'rgba(201,148,58,',  a:.022, fx:-.00008 },
+    { x:.5,  y:.9,  r:280, c:'rgba(255,77,141,',  a:.014, fx:.00006 },
+    { x:.9,  y:.1,  r:220, c:'rgba(163,255,110,', a:.011, fx:-.00013 },
+  ];
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += .016;
+
+    /* nebula orbs */
+    orbs.forEach(o => {
+      const ox = (o.x + Math.sin(t * o.fx * 80) * .04) * W;
+      const oy = (o.y + Math.cos(t * o.fx * 60) * .04) * H;
+      const g  = ctx.createRadialGradient(ox, oy, 0, ox, oy, o.r);
+      g.addColorStop(0,  o.c + o.a + ')');
+      g.addColorStop(.5, o.c + (o.a * .38) + ')');
+      g.addColorStop(1,  o.c + '0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(ox, oy, o.r, 0, Math.PI * 2); ctx.fill();
+    });
+
+    /* subtle grid */
+    ctx.lineWidth = .3;
+    for (let x = 0; x < W; x += 80) {
+      ctx.strokeStyle = `rgba(255,255,255,${.003 + .003 * Math.sin(t * .25 + x * .012)})`;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += 80) {
+      ctx.strokeStyle = `rgba(255,255,255,${.003 + .003 * Math.cos(t * .25 + y * .012)})`;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    /* data streams — Matrix style */
+    ctx.font = '8px "Share Tech Mono",monospace';
+    streams.forEach(s => {
+      for (let i = 0; i < s.len; i++) {
+        const a = s.op * (1 - i / s.len) * (i === 0 ? 3 : 1);
+        const hex = Math.min(255, Math.round(a * 255)).toString(16).padStart(2, '0');
+        ctx.fillStyle = s.c + hex;
+        ctx.fillText(s.ch[i % s.ch.length], s.x % W, (s.y + i * 13) % H);
+      }
+      s.y += s.sp;
+      if (s.y > H + 220) { s.y = -240; s.x = Math.random() * W; }
+    });
+
+    /* floating particles — upward drift across full page height */
+    pts.forEach((p, idx) => {
+      p.life++;
+      p.wobble += p.wobbleSpeed;
+      p.x += p.vx + Math.sin(p.wobble) * .18;
+      p.y += p.vy;
+
+      const lifeRatio = p.life / p.maxLife;
+      const fadeAlpha = lifeRatio < .12
+        ? lifeRatio / .12
+        : lifeRatio > .75
+          ? 1 - (lifeRatio - .75) / .25
+          : 1;
+      const alpha = p.a * fadeAlpha;
+
+      if (p.glow) {
+        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
+        grd.addColorStop(0,  p.c + Math.round(alpha * 255).toString(16).padStart(2,'0'));
+        grd.addColorStop(.4, p.c + Math.round(alpha * .4 * 255).toString(16).padStart(2,'0'));
+        grd.addColorStop(1,  p.c + '00');
+        ctx.fillStyle = grd;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2); ctx.fill();
+      }
+
+      const px = ((p.x % W) + W) % W;
+      ctx.beginPath(); ctx.arc(px, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c + Math.round(alpha * 255).toString(16).padStart(2, '0');
+      ctx.fill();
+
+      /* recycle off-screen or expired */
+      if (p.life >= p.maxLife || p.y < -30) {
+        pts[idx] = mkPt();
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
