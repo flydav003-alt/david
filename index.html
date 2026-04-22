@@ -34,15 +34,13 @@ body{
 
 /* ══════════════════════════════════════
    BACKGROUND LAYERS
-   canvas is z:20 — above cards, pointer-events:none so clicks pass through
 ══════════════════════════════════════ */
 canvas#bg{
   position:fixed;inset:0;
-  z-index:20;          /* ← above cards, below header */
+  z-index:20;
   pointer-events:none;
 }
 
-/* scanlines */
 .scanlines{
   position:fixed;inset:0;z-index:1;pointer-events:none;
   background:repeating-linear-gradient(
@@ -52,25 +50,23 @@ canvas#bg{
   );
   opacity:.55;
 }
-/* film grain */
 .grain{
   position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.028;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size:180px;
 }
-/* vignette */
 .vignette{
   position:fixed;inset:0;z-index:3;pointer-events:none;
   background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.7) 100%);
 }
 
 /* ══════════════════════════════════════
-   APP — no explicit z-index so stacking context stays flat
+   APP
 ══════════════════════════════════════ */
 #app{position:relative;display:flex;flex-direction:column;min-height:100vh;}
 
 /* ══════════════════════════════════════
-   HEADER — z:50 floats above canvas bubbles
+   HEADER
 ══════════════════════════════════════ */
 header{
   padding:1.3rem 2.8rem;
@@ -102,12 +98,11 @@ header{
 ══════════════════════════════════════ */
 main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%;}
 
-/* ── Section head ── */
 .sec-head{
   display:flex;align-items:flex-end;justify-content:space-between;
-  margin-bottom:2.8rem;padding-bottom:1.6rem;padding-top:.6rem;   /* fix clip */
+  margin-bottom:2.8rem;padding-bottom:1.6rem;padding-top:.6rem;
   border-bottom:1px solid var(--border);position:relative;
-  overflow:visible;   /* never clip ascenders */
+  overflow:visible;
 }
 .sec-head::after{
   content:'';position:absolute;bottom:-1px;left:0;width:220px;height:1px;
@@ -135,7 +130,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   overflow:visible;
 }
 
-/* ── Clock block ── */
 .clock-block{text-align:right;line-height:1.15;flex-shrink:0;padding-left:1.5rem;}
 
 .clock-time{
@@ -154,7 +148,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   99%{opacity:.9;}
 }
 
-/* Chinese date — Noto Serif TC for authentic rendering */
 .clock-date{
   font-family:'Noto Serif TC',serif;
   font-size:.75rem;font-weight:500;
@@ -176,8 +169,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 
 /* ══════════════════════════════════════
    CARD BASE
-   z-index:1 so they sit above the base but below canvas (z:20).
-   Clicks pass through canvas because pointer-events:none is set there.
 ══════════════════════════════════════ */
 .card{
   position:relative;overflow:hidden;border-radius:3px;
@@ -202,8 +193,34 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 }
 .card:hover::after{left:140%;}
 
-/* ── Card 1 · Cyan Grid ── */
-.card-1{
+/* ══════════════════════════════════════
+   CARD STYLES
+   card-1 = 金色蜂巢 (원래 card-2)
+   card-2 = 青藍方格 (원래 card-1)
+══════════════════════════════════════ */
+
+/* ── Card 1 · 金色蜂巢 (swapped from card-2) ── */
+.card-1{background:#09090a;box-shadow:inset 0 0 100px rgba(201,148,58,.06);}
+.card-1:hover{border-color:rgba(247,214,122,.42);
+  box-shadow:0 24px 64px rgba(201,148,58,.16),inset 0 0 100px rgba(201,148,58,.1);}
+.card-1::before{background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);}
+.card-1::after{background:linear-gradient(105deg,transparent 20%,rgba(247,214,122,.07) 50%,transparent 80%);}
+.card-1 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.14;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 70L2 54V22L30 6l28 16v32L30 70zm0 0v34M2 54l28 16M58 54L30 70' fill='none' stroke='%23c9943a' stroke-width='0.7'/%3E%3C/svg%3E");
+  background-size:60px 104px;transition:opacity .4s;
+}
+.card-1:hover .pat{opacity:.32;}
+.card-1 .orb{
+  position:absolute;bottom:-80px;left:-60px;z-index:1;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,148,58,.1) 0%,transparent 65%);
+  transition:transform 1s cubic-bezier(.23,1,.32,1);
+}
+.card-1:hover .orb{transform:scale(1.4) translate(14px,-14px);}
+
+/* ── Card 2 · 青藍方格 (swapped from card-1) ── */
+.card-2{
   background:
     linear-gradient(145deg,rgba(56,239,255,.07) 0%,transparent 50%,rgba(56,239,255,.03) 100%),
     linear-gradient(rgba(56,239,255,.028) 1px,transparent 1px),
@@ -212,38 +229,18 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   background-size:auto,28px 28px,28px 28px;
   box-shadow:inset 0 0 120px rgba(56,239,255,.04);
 }
-.card-1:hover{border-color:rgba(56,239,255,.4);
+.card-2:hover{border-color:rgba(56,239,255,.4);
   box-shadow:0 24px 64px rgba(56,239,255,.15),inset 0 0 120px rgba(56,239,255,.08);}
-.card-1::before{background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
-.card-1::after{background:linear-gradient(105deg,transparent 20%,rgba(56,239,255,.08) 50%,transparent 80%);}
-.card-1 .ring{
+.card-2::before{background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.card-2::after{background:linear-gradient(105deg,transparent 20%,rgba(56,239,255,.08) 50%,transparent 80%);}
+.card-2 .ring{
   position:absolute;top:-55px;right:-55px;z-index:1;
   width:210px;height:210px;border-radius:50%;
   border:1px solid rgba(56,239,255,.07);
   box-shadow:0 0 0 28px rgba(56,239,255,.025),0 0 0 56px rgba(56,239,255,.012);
   transition:transform 1.2s cubic-bezier(.23,1,.32,1),opacity .4s;opacity:.5;
 }
-.card-1:hover .ring{transform:scale(1.3);opacity:1;}
-
-/* ── Card 2 · Gold Honeycomb ── */
-.card-2{background:#09090a;box-shadow:inset 0 0 100px rgba(201,148,58,.06);}
-.card-2:hover{border-color:rgba(247,214,122,.42);
-  box-shadow:0 24px 64px rgba(201,148,58,.16),inset 0 0 100px rgba(201,148,58,.1);}
-.card-2::before{background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);}
-.card-2::after{background:linear-gradient(105deg,transparent 20%,rgba(247,214,122,.07) 50%,transparent 80%);}
-.card-2 .pat{
-  position:absolute;inset:0;z-index:1;opacity:.14;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 70L2 54V22L30 6l28 16v32L30 70zm0 0v34M2 54l28 16M58 54L30 70' fill='none' stroke='%23c9943a' stroke-width='0.7'/%3E%3C/svg%3E");
-  background-size:60px 104px;transition:opacity .4s;
-}
-.card-2:hover .pat{opacity:.32;}
-.card-2 .orb{
-  position:absolute;bottom:-80px;left:-60px;z-index:1;
-  width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle,rgba(201,148,58,.1) 0%,transparent 65%);
-  transition:transform 1s cubic-bezier(.23,1,.32,1);
-}
-.card-2:hover .orb{transform:scale(1.4) translate(14px,-14px);}
+.card-2:hover .ring{transform:scale(1.3);opacity:1;}
 
 /* ── Card 3 · Rose Radar ── */
 .card-3{
@@ -303,10 +300,12 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 .card:hover .cor{width:22px;height:22px;opacity:1;}
 .c-tl{top:11px;left:11px;border-width:1px 0 0 1px;}
 .c-br{bottom:11px;right:11px;border-width:0 1px 1px 0;}
-.card-1 .cor{border-color:rgba(56,239,255,.3);}   .card-1:hover .cor{border-color:rgba(56,239,255,1);}
-.card-2 .cor{border-color:rgba(247,214,122,.3);} .card-2:hover .cor{border-color:rgba(247,214,122,1);}
-.card-3 .cor{border-color:rgba(255,77,141,.3);}  .card-3:hover .cor{border-color:rgba(255,77,141,1);}
-.card-4 .cor{border-color:rgba(163,255,110,.3);} .card-4:hover .cor{border-color:rgba(163,255,110,1);}
+
+/* ── Corner bracket colours — swapped for card-1 & card-2 ── */
+.card-1 .cor{border-color:rgba(247,214,122,.3);}  .card-1:hover .cor{border-color:rgba(247,214,122,1);}
+.card-2 .cor{border-color:rgba(56,239,255,.3);}   .card-2:hover .cor{border-color:rgba(56,239,255,1);}
+.card-3 .cor{border-color:rgba(255,77,141,.3);}   .card-3:hover .cor{border-color:rgba(255,77,141,1);}
+.card-4 .cor{border-color:rgba(163,255,110,.3);}  .card-4:hover .cor{border-color:rgba(163,255,110,1);}
 
 .card-num{
   position:absolute;top:13px;right:15px;z-index:6;
@@ -317,8 +316,7 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 .card:hover .card-num{color:rgba(255,255,255,.35);}
 
 /* ──────────────────────────────────────
-   CARD TITLES — Noto Serif TC
-   Beautiful, strong Chinese + English rendering
+   CARD TITLES
 ────────────────────────────────────── */
 .card-title{
   font-family:'Noto Serif TC',serif;
@@ -337,14 +335,14 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   transition:color .35s,letter-spacing .4s;
 }
 
-/* hover colours */
+/* ── Hover colours — swapped for card-1 & card-2 ── */
 .card-1:hover .card-title{color:var(--gold-hi);
   text-shadow:0 0 16px rgba(247,214,122,.85),0 0 45px rgba(247,214,122,.4),0 0 90px rgba(247,214,122,.18);}
-.card-2:hover .card-sub{color:rgba(201,148,58,.82);letter-spacing:.16em;}
+.card-1:hover .card-sub{color:rgba(201,148,58,.82);letter-spacing:.16em;}
 
 .card-2:hover .card-title{color:var(--cyan);
   text-shadow:0 0 16px rgba(56,239,255,.8),0 0 45px rgba(56,239,255,.35);}
-.card-1:hover .card-sub{color:rgba(56,239,255,.65);letter-spacing:.16em;}
+.card-2:hover .card-sub{color:rgba(56,239,255,.65);letter-spacing:.16em;}
 
 .card-3:hover .card-title{color:#ff82b0;
   text-shadow:0 0 16px rgba(255,77,141,.8),0 0 45px rgba(255,77,141,.35);}
@@ -423,7 +421,6 @@ footer{
         <span class="t-ghost">Systems</span>
       </h2>
 
-      <!-- 時鐘區塊 -->
       <div class="clock-block">
         <span class="clock-time" id="clk-time">00:00:00</span>
         <span class="clock-date" id="clk-date">載入中</span>
@@ -433,8 +430,8 @@ footer{
 
     <div class="grid">
 
-      <!-- 01 · 上櫃操盤手 · 青藍方格 -->
-      <a class="card card-2 reveal d1"
+      <!-- 01 · 上櫃操盤手 · 金色蜂巢 (swapped) -->
+      <a class="card card-1 reveal d1"
          href="https://flydav003-alt.github.io/tw-otc/"
          target="_blank" rel="noopener">
         <div class="pat"></div><div class="orb"></div>
@@ -446,8 +443,8 @@ footer{
         </div>
       </a>
 
-      <!-- 02 · 台股GOGOGO · 金色蜂巢 -->
-      <a class="card card-1 reveal d2"
+      <!-- 02 · 台股GOGOGO · 青藍方格 (swapped) -->
+      <a class="card card-2 reveal d2"
          href="https://flydav003-alt.github.io/tw-tse/"
          target="_blank" rel="noopener">
         <div class="ring"></div>
@@ -472,7 +469,7 @@ footer{
         </div>
       </a>
 
-      <!-- 04 · 台股發發發 · 玫瑰同心圓 -->
+      <!-- 04 · 台股發發發 · 萊姆矩陣 -->
       <a class="card card-4 reveal d3"
          href="https://flydav003-alt.github.io/tw888/"
          target="_blank" rel="noopener">
@@ -497,21 +494,9 @@ footer{
 
 <script>
 /* ══════════════════════════════════════
-   LIVE CLOCK — 繁體中文日期
+   LIVE CLOCK
 ══════════════════════════════════════ */
-const MONTHS_ZH = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
-const DAYS_ZH   = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-
-function numToChinese(n) {
-  const ones = ['','一','二','三','四','五','六','七','八','九'];
-  if (n < 10)  return ones[n];
-  if (n === 10) return '十';
-  if (n < 20)  return '十' + ones[n - 10];
-  if (n === 20) return '二十';
-  if (n < 30)  return '二十' + ones[n - 20];
-  if (n === 30) return '三十';
-  return '三十' + ones[n - 30];
-}
+const DAYS_ZH = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
 
 function updateClock() {
   const now = new Date();
@@ -521,13 +506,10 @@ function updateClock() {
   document.getElementById('clk-time').textContent = `${h}:${m}:${s}`;
 
   const yr  = now.getFullYear();
-  const mon = MONTHS_ZH[now.getMonth()];
-  const day = numToChinese(now.getDate());
+  const mon = now.getMonth() + 1;
+  const day = now.getDate();
   const dow = DAYS_ZH[now.getDay()];
-  // e.g. 2026年4月12日 星期六
-  const monNum  = now.getMonth() + 1;
-  const dateNum = now.getDate();
-  document.getElementById('clk-date').textContent = `${yr}年${monNum}月${dateNum}日　${dow}`;
+  document.getElementById('clk-date').textContent = `${yr}年${mon}月${day}日　${dow}`;
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -544,8 +526,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* ══════════════════════════════════════
    CANVAS BACKGROUND
-   canvas is z:20 (above cards, below header z:50)
-   pointer-events:none — all card clicks pass through
 ══════════════════════════════════════ */
 (function () {
   const cv  = document.getElementById('bg');
@@ -554,7 +534,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   const rz = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
   rz(); window.addEventListener('resize', rz);
 
-  /* ── Floating particles — upward drift, cover full page including header ── */
   function mkPt() {
     const big = Math.random() < .12;
     return {
@@ -573,14 +552,12 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     };
   }
 
-  /* Spread initial particles across full height so some are already mid-travel */
   const pts = Array.from({ length: 130 }, () => {
     const p = mkPt();
-    p.y = Math.random() * (H + 200) - 200;  // scatter from top to below screen
+    p.y = Math.random() * (H + 200) - 200;
     return p;
   });
 
-  /* ── Data stream columns ── */
   const NCOL = 22;
   const streams = Array.from({ length: NCOL }, () => ({
     x: Math.random() * 2200,
@@ -596,7 +573,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e'][Math.random() * 4 | 0],
   }));
 
-  /* ── Nebula orbs (slow drift, covers whole page) ── */
   const orbs = [
     { x:.12, y:.22, r:420, c:'rgba(56,239,255,',  a:.018, fx:.00010 },
     { x:.82, y:.68, r:360, c:'rgba(201,148,58,',  a:.022, fx:-.00008 },
@@ -608,7 +584,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     ctx.clearRect(0, 0, W, H);
     t += .016;
 
-    /* nebula orbs */
     orbs.forEach(o => {
       const ox = (o.x + Math.sin(t * o.fx * 80) * .04) * W;
       const oy = (o.y + Math.cos(t * o.fx * 60) * .04) * H;
@@ -620,7 +595,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
       ctx.beginPath(); ctx.arc(ox, oy, o.r, 0, Math.PI * 2); ctx.fill();
     });
 
-    /* subtle grid */
     ctx.lineWidth = .3;
     for (let x = 0; x < W; x += 80) {
       ctx.strokeStyle = `rgba(255,255,255,${.003 + .003 * Math.sin(t * .25 + x * .012)})`;
@@ -631,7 +605,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
     }
 
-    /* data streams — Matrix style */
     ctx.font = '8px "Share Tech Mono",monospace';
     streams.forEach(s => {
       for (let i = 0; i < s.len; i++) {
@@ -644,7 +617,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
       if (s.y > H + 220) { s.y = -240; s.x = Math.random() * W; }
     });
 
-    /* floating particles — upward drift across full page height */
     pts.forEach((p, idx) => {
       p.life++;
       p.wobble += p.wobbleSpeed;
@@ -673,7 +645,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
       ctx.fillStyle = p.c + Math.round(alpha * 255).toString(16).padStart(2, '0');
       ctx.fill();
 
-      /* recycle off-screen or expired */
       if (p.life >= p.maxLife || p.y < -30) {
         pts[idx] = mkPt();
       }
