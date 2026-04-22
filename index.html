@@ -338,13 +338,13 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 }
 
 /* hover colours */
-.card-1:hover .card-title{color:var(--cyan);
-  text-shadow:0 0 16px rgba(56,239,255,.8),0 0 45px rgba(56,239,255,.35);}
-.card-1:hover .card-sub{color:rgba(56,239,255,.65);letter-spacing:.16em;}
-
-.card-2:hover .card-title{color:var(--gold-hi);
+.card-1:hover .card-title{color:var(--gold-hi);
   text-shadow:0 0 16px rgba(247,214,122,.85),0 0 45px rgba(247,214,122,.4),0 0 90px rgba(247,214,122,.18);}
 .card-2:hover .card-sub{color:rgba(201,148,58,.82);letter-spacing:.16em;}
+
+.card-2:hover .card-title{color:var(--cyan);
+  text-shadow:0 0 16px rgba(56,239,255,.8),0 0 45px rgba(56,239,255,.35);}
+.card-1:hover .card-sub{color:rgba(56,239,255,.65);letter-spacing:.16em;}
 
 .card-3:hover .card-title{color:#ff82b0;
   text-shadow:0 0 16px rgba(255,77,141,.8),0 0 45px rgba(255,77,141,.35);}
@@ -434,10 +434,10 @@ footer{
     <div class="grid">
 
       <!-- 01 · 上櫃操盤手 · 青藍方格 -->
-      <a class="card card-1 reveal d1"
+      <a class="card card-2 reveal d1"
          href="https://flydav003-alt.github.io/tw-otc/"
          target="_blank" rel="noopener">
-        <div class="ring"></div>
+        <div class="pat"></div><div class="orb"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
         <span class="card-num">[ 01 ]</span>
         <div class="card-overlay">
@@ -447,10 +447,10 @@ footer{
       </a>
 
       <!-- 02 · 台股GOGOGO · 金色蜂巢 -->
-      <a class="card card-2 reveal d2"
+      <a class="card card-1 reveal d2"
          href="https://flydav003-alt.github.io/tw-tse/"
          target="_blank" rel="noopener">
-        <div class="pat"></div><div class="orb"></div>
+        <div class="ring"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
         <span class="card-num">[ 02 ]</span>
         <div class="card-overlay">
