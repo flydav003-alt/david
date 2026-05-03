@@ -11,7 +11,9 @@
    TOKENS
 ══════════════════════════════════════ */
 :root{
-  --bg:        #05070a;
+  --bg-top:    #141824;
+  --bg-mid:    #0c1018;
+  --bg-bot:    #080c10;
   --gold-hi:   #f7d67a;
   --gold-mid:  #c9943a;
   --cyan:      #38efff;
@@ -21,6 +23,10 @@
   --violet-mid:#9333ea;
   --amber:     #fbbf24;
   --amber-mid: #d97706;
+  --teal:      #2dd4bf;
+  --teal-mid:  #0d9488;
+  --crimson:   #ff6b6b;
+  --crimson-mid:#dc2626;
   --border:    rgba(255,255,255,0.06);
   --mute:      rgba(255,255,255,0.28);
 }
@@ -31,7 +37,9 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{
-  background:var(--bg);color:#ddd;
+  background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-mid) 50%,var(--bg-bot) 100%);
+  background-attachment:fixed;
+  color:#ddd;
   font-family:'Rajdhani',sans-serif;font-weight:300;
   min-height:100vh;overflow-x:hidden;
 }
@@ -41,7 +49,7 @@ body{
 ══════════════════════════════════════ */
 canvas#bg{
   position:fixed;inset:0;
-  z-index:20;
+  z-index:0;
   pointer-events:none;
 }
 
@@ -50,24 +58,24 @@ canvas#bg{
   background:repeating-linear-gradient(
     to bottom,
     transparent 0px,transparent 2px,
-    rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px
+    rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px
   );
-  opacity:.55;
+  opacity:.45;
 }
 .grain{
-  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.028;
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.025;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size:180px;
 }
 .vignette{
   position:fixed;inset:0;z-index:3;pointer-events:none;
-  background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.7) 100%);
+  background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,0.65) 100%);
 }
 
 /* ══════════════════════════════════════
    APP
 ══════════════════════════════════════ */
-#app{position:relative;display:flex;flex-direction:column;min-height:100vh;}
+#app{position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;}
 
 /* ══════════════════════════════════════
    HEADER
@@ -76,7 +84,7 @@ header{
   padding:1.3rem 2.8rem;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid var(--border);
-  background:rgba(5,7,10,0.82);
+  background:rgba(20,24,36,0.85);
   backdrop-filter:blur(22px);
   position:sticky;top:0;z-index:50;
   animation:fadeDown .7s .1s ease both;
@@ -296,7 +304,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 }
 .card-5::before{background:linear-gradient(90deg,transparent,var(--violet),transparent);}
 .card-5::after{background:linear-gradient(105deg,transparent 20%,rgba(192,132,252,.07) 50%,transparent 80%);}
-/* 龜裂紋路 SVG 背景 */
 .card-5 .pat{
   position:absolute;inset:0;z-index:1;opacity:.1;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='none' stroke='%239333ea' stroke-width='0.6'%3E%3Cpath d='M40 0 L55 30 L30 55 L0 45'/%3E%3Cpath d='M55 30 L90 20 L110 50 L80 80 L55 65 L55 30'/%3E%3Cpath d='M110 50 L140 30 L170 60 L145 90 L110 80 L110 50'/%3E%3Cpath d='M170 60 L210 40 L220 80 L190 100 L170 85 L170 60'/%3E%3Cpath d='M30 55 L55 65 L45 100 L10 110 L0 80'/%3E%3Cpath d='M80 80 L110 80 L100 120 L65 130 L45 100 L80 80'/%3E%3Cpath d='M145 90 L170 85 L175 125 L140 140 L110 120 L145 90'/%3E%3Cpath d='M190 100 L220 115 L215 155 L180 160 L175 125 L190 100'/%3E%3Cpath d='M10 110 L45 100 L65 130 L50 165 L15 175 L0 145'/%3E%3Cpath d='M100 120 L140 140 L125 175 L85 180 L65 155 L100 120'/%3E%3Cpath d='M175 125 L180 160 L160 190 L130 195 L125 175 L175 125'/%3E%3Cpath d='M50 165 L85 180 L75 220 L30 220 L15 190'/%3E%3Cpath d='M125 175 L130 195 L110 220 L80 215 L75 185'/%3E%3C/g%3E%3C/svg%3E");
@@ -304,7 +311,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   transition:opacity .4s;
 }
 .card-5:hover .pat{opacity:.28;}
-/* 左上角紫色光暈 */
 .card-5 .orb{
   position:absolute;top:-60px;left:-40px;z-index:1;
   width:260px;height:260px;border-radius:50%;
@@ -312,7 +318,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   transition:transform 1s cubic-bezier(.23,1,.32,1);
 }
 .card-5:hover .orb{transform:scale(1.35) translate(10px,10px);}
-/* 右下角小菱形裝飾 */
 .card-5 .dia{
   position:absolute;bottom:18px;right:22px;z-index:2;
   width:28px;height:28px;
@@ -335,7 +340,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 }
 .card-6::before{background:linear-gradient(90deg,transparent,var(--amber),transparent);}
 .card-6::after{background:linear-gradient(105deg,transparent 20%,rgba(251,191,36,.07) 50%,transparent 80%);}
-/* 橫向波浪線 */
 .card-6 .pat{
   position:absolute;inset:0;z-index:1;opacity:.1;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='120'%3E%3Cg fill='none' stroke='%23d97706' stroke-width='0.7'%3E%3Cpath d='M0 20 Q40 10 80 20 Q120 30 160 20 Q200 10 240 20 Q280 30 320 20'/%3E%3Cpath d='M0 40 Q40 30 80 40 Q120 50 160 40 Q200 30 240 40 Q280 50 320 40'/%3E%3Cpath d='M0 60 Q40 50 80 60 Q120 70 160 60 Q200 50 240 60 Q280 70 320 60'/%3E%3Cpath d='M0 80 Q40 70 80 80 Q120 90 160 80 Q200 70 240 80 Q280 90 320 80'/%3E%3Cpath d='M0 100 Q40 90 80 100 Q120 110 160 100 Q200 90 240 100 Q280 110 320 100'/%3E%3C/g%3E%3C/svg%3E");
@@ -343,7 +347,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   transition:opacity .4s;
 }
 .card-6:hover .pat{opacity:.28;}
-/* 右下扇形裝飾 */
 .card-6 .fan{
   position:absolute;bottom:-20px;right:-20px;z-index:2;
   width:110px;height:110px;border-radius:50% 0 0 0;
@@ -361,7 +364,6 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
              -70px -70px 0 -69px rgba(251,191,36,.1);
   transform:scale(1.15);
 }
-/* 頂部橙色光源 */
 .card-6 .beam{
   position:absolute;top:-40px;right:30px;z-index:1;
   width:140px;height:200px;
@@ -370,6 +372,94 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 }
 .card-6:hover .beam{opacity:1;}
 
+/* ── Card 7 · 青碧 · DNA螺旋 ── */
+.card-7{
+  background:
+    radial-gradient(ellipse at 20% 65%,rgba(13,148,136,.14) 0%,transparent 55%),
+    radial-gradient(ellipse at 88% 15%,rgba(45,212,191,.08) 0%,transparent 48%),
+    #04100f;
+  box-shadow:inset 0 0 100px rgba(13,148,136,.05);
+}
+.card-7:hover{
+  border-color:rgba(45,212,191,.45);
+  box-shadow:0 24px 64px rgba(13,148,136,.18),inset 0 0 100px rgba(13,148,136,.1);
+}
+.card-7::before{background:linear-gradient(90deg,transparent,var(--teal),transparent);}
+.card-7::after{background:linear-gradient(105deg,transparent 20%,rgba(45,212,191,.08) 50%,transparent 80%);}
+.card-7 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.11;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='180'%3E%3Cg fill='none' stroke='%230d9488' stroke-width='0.65'%3E%3Cpath d='M20 0 Q60 22 100 44 Q60 66 20 88 Q60 110 100 132 Q60 154 20 176'/%3E%3Cpath d='M100 0 Q60 22 20 44 Q60 66 100 88 Q60 110 20 132 Q60 154 100 176'/%3E%3Cline x1='20' y1='44' x2='100' y2='44' stroke-width='0.4' opacity='.5'/%3E%3Cline x1='20' y1='88' x2='100' y2='88' stroke-width='0.4' opacity='.5'/%3E%3Cline x1='20' y1='132' x2='100' y2='132' stroke-width='0.4' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:120px 180px;
+  transition:opacity .4s;
+}
+.card-7:hover .pat{opacity:.3;}
+.card-7 .orb{
+  position:absolute;top:-55px;right:-55px;z-index:1;
+  width:250px;height:250px;border-radius:50%;
+  background:radial-gradient(circle,rgba(45,212,191,.1) 0%,transparent 65%);
+  transition:transform 1s cubic-bezier(.23,1,.32,1);
+}
+.card-7:hover .orb{transform:scale(1.4) translate(-12px,12px);}
+.card-7 .tick{
+  position:absolute;bottom:16px;left:18px;z-index:2;
+  display:flex;gap:5px;
+}
+.card-7 .tick span{
+  display:block;width:2px;border-radius:1px;
+  background:rgba(45,212,191,.2);
+  transition:background .4s,height .4s;
+}
+.card-7 .tick span:nth-child(1){height:10px;}
+.card-7 .tick span:nth-child(2){height:18px;}
+.card-7 .tick span:nth-child(3){height:12px;}
+.card-7 .tick span:nth-child(4){height:22px;}
+.card-7 .tick span:nth-child(5){height:8px;}
+.card-7 .tick span:nth-child(6){height:16px;}
+.card-7:hover .tick span{background:rgba(45,212,191,.6);}
+
+/* ── Card 8 · 深緋 · 同心六邊形 ── */
+.card-8{
+  background:
+    radial-gradient(ellipse at 72% 68%,rgba(220,38,38,.12) 0%,transparent 52%),
+    radial-gradient(ellipse at 12% 18%,rgba(255,107,107,.07) 0%,transparent 46%),
+    #0e0606;
+  box-shadow:inset 0 0 100px rgba(220,38,38,.05);
+}
+.card-8:hover{
+  border-color:rgba(255,107,107,.45);
+  box-shadow:0 24px 64px rgba(220,38,38,.18),inset 0 0 100px rgba(220,38,38,.1);
+}
+.card-8::before{background:linear-gradient(90deg,transparent,var(--crimson),transparent);}
+.card-8::after{background:linear-gradient(105deg,transparent 20%,rgba(255,107,107,.07) 50%,transparent 80%);}
+.card-8 .pat{
+  position:absolute;inset:0;z-index:1;opacity:.09;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='none' stroke='%23dc2626' stroke-width='0.5'%3E%3Cpolygon points='80,6 150,46 150,114 80,154 10,114 10,46'/%3E%3Cpolygon points='80,26 134,60 134,114 80,142 26,108 26,60'/%3E%3Cpolygon points='80,46 118,68 118,108 80,130 42,108 42,68'/%3E%3Cpolygon points='80,66 102,80 102,104 80,116 58,104 58,80'/%3E%3Cline x1='80' y1='6' x2='80' y2='154' stroke-width='.3' opacity='.35'/%3E%3Cline x1='10' y1='80' x2='150' y2='80' stroke-width='.3' opacity='.35'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:160px 160px;
+  background-position:center;
+  transition:opacity .4s;
+}
+.card-8:hover .pat{opacity:.28;}
+.card-8 .spark{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:1;
+  width:1px;height:100%;
+  background:linear-gradient(to bottom,rgba(255,107,107,.12) 0%,rgba(220,38,38,.18) 40%,transparent 100%);
+  transition:opacity .4s;opacity:.4;
+}
+.card-8:hover .spark{opacity:.9;}
+.card-8 .arc{
+  position:absolute;bottom:-35px;left:-35px;z-index:2;
+  width:130px;height:130px;border-radius:0 50% 0 0;
+  border-top:1px solid rgba(255,107,107,.08);
+  border-right:1px solid rgba(255,107,107,.08);
+  box-shadow:26px -26px 0 -25px rgba(255,107,107,.05),52px -52px 0 -51px rgba(255,107,107,.03);
+  transition:border-color .4s,box-shadow .4s,transform .8s cubic-bezier(.23,1,.32,1);
+}
+.card-8:hover .arc{
+  border-color:rgba(255,107,107,.38);
+  box-shadow:26px -26px 0 -25px rgba(255,107,107,.25),52px -52px 0 -51px rgba(255,107,107,.14);
+  transform:scale(1.18);
+}
+
 /* ══════════════════════════════════════
    CARD OVERLAY
 ══════════════════════════════════════ */
@@ -377,7 +467,7 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   position:absolute;inset:0;z-index:5;
   display:flex;flex-direction:column;justify-content:flex-end;
   padding:1.5rem 1.7rem 1.4rem;
-  background:linear-gradient(to top,rgba(5,7,10,.93) 0%,rgba(5,7,10,.5) 38%,rgba(5,7,10,.08) 65%,transparent 100%);
+  background:linear-gradient(to top,rgba(4,6,8,.95) 0%,rgba(4,6,8,.52) 38%,rgba(4,6,8,.08) 65%,transparent 100%);
 }
 
 /* corner brackets */
@@ -396,6 +486,8 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
 .card-4 .cor{border-color:rgba(163,255,110,.3);}  .card-4:hover .cor{border-color:rgba(163,255,110,1);}
 .card-5 .cor{border-color:rgba(192,132,252,.3);}  .card-5:hover .cor{border-color:rgba(192,132,252,1);}
 .card-6 .cor{border-color:rgba(251,191,36,.3);}   .card-6:hover .cor{border-color:rgba(251,191,36,1);}
+.card-7 .cor{border-color:rgba(45,212,191,.3);}   .card-7:hover .cor{border-color:rgba(45,212,191,1);}
+.card-8 .cor{border-color:rgba(255,107,107,.3);}  .card-8:hover .cor{border-color:rgba(255,107,107,1);}
 
 .card-num{
   position:absolute;top:13px;right:15px;z-index:6;
@@ -447,7 +539,15 @@ main{flex:1;padding:3.8rem 2.8rem 6rem;max-width:1200px;margin:0 auto;width:100%
   text-shadow:0 0 16px rgba(251,191,36,.85),0 0 45px rgba(217,119,6,.4),0 0 90px rgba(217,119,6,.18);}
 .card-6:hover .card-sub{color:rgba(251,191,36,.7);letter-spacing:.16em;}
 
-/* 待續 badge */
+.card-7:hover .card-title{color:var(--teal);
+  text-shadow:0 0 16px rgba(45,212,191,.85),0 0 45px rgba(13,148,136,.4),0 0 90px rgba(13,148,136,.18);}
+.card-7:hover .card-sub{color:rgba(45,212,191,.7);letter-spacing:.16em;}
+
+.card-8:hover .card-title{color:var(--crimson);
+  text-shadow:0 0 16px rgba(255,107,107,.85),0 0 45px rgba(220,38,38,.4),0 0 90px rgba(220,38,38,.18);}
+.card-8:hover .card-sub{color:rgba(255,107,107,.7);letter-spacing:.16em;}
+
+/* badges */
 .coming-badge{
   position:absolute;top:14px;left:16px;z-index:8;
   font-family:'Share Tech Mono',monospace;
@@ -467,7 +567,7 @@ footer{
   border-top:1px solid var(--border);
   padding:1.5rem 2.8rem;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(5,7,10,.5);
+  background:rgba(8,12,16,.6);
 }
 .foot{font-family:'Share Tech Mono',monospace;font-size:.55rem;
   letter-spacing:.2em;color:rgba(255,255,255,.1);text-transform:uppercase;}
@@ -484,7 +584,7 @@ footer{
 .reveal{opacity:0;transform:translateY(22px);
   transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
 .reveal.up{opacity:1;transform:none;}
-.d1{transition-delay:.09s;}.d2{transition-delay:.18s;}.d3{transition-delay:.27s;}.d4{transition-delay:.36s;}
+.d1{transition-delay:.09s;}.d2{transition-delay:.18s;}.d3{transition-delay:.27s;}.d4{transition-delay:.36s;}.d5{transition-delay:.45s;}
 
 /* ══════════════════════════════════════
    RESPONSIVE
@@ -590,19 +690,20 @@ footer{
         </div>
       </a>
 
-<!-- 05 -->
-<a class="card card-5 reveal d3"
-   href="https://flydav003-alt.github.io/etf/"
-   target="_blank" rel="noopener">
-  <div class="pat"></div><div class="orb"></div><div class="dia"></div>
-  <span class="cor c-tl"></span><span class="cor c-br"></span>
-  <span class="card-num">[ 05 ]</span>
-  <div class="card-overlay">
-    <span class="card-title">主動ETF追蹤儀表板</span>
-    <span class="card-sub">主動式ETF每日追蹤</span>
-  </div>
-</a>
-      <!-- 06 · 琥珀波紋 · K線評分排名報告與回測系統 -->
+      <!-- 05 · 主動ETF · 紫晶裂紋 -->
+      <a class="card card-5 reveal d3"
+         href="https://flydav003-alt.github.io/etf/"
+         target="_blank" rel="noopener">
+        <div class="pat"></div><div class="orb"></div><div class="dia"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 05 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">主動ETF追蹤儀表板</span>
+          <span class="card-sub">主動式ETF每日追蹤</span>
+        </div>
+      </a>
+
+      <!-- 06 · K線評分排名與回測 · 琥珀波紋 -->
       <a class="card card-6 reveal d4"
          href="https://flydav003-alt.github.io/BT/"
          target="_blank" rel="noopener">
@@ -613,6 +714,38 @@ footer{
         <div class="card-overlay">
           <span class="card-title">K線評分排名與整體閉環回測</span>
           <span class="card-sub">ETF上櫃上市K線綜合回測</span>
+        </div>
+      </a>
+
+      <!-- 07 · 待續 · 青碧DNA螺旋 -->
+      <a class="card card-7 reveal d4"
+         href="#"
+         target="_blank" rel="noopener">
+        <div class="pat"></div><div class="orb"></div>
+        <div class="tick">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 07 ]</span>
+        <span class="coming-badge">Coming Soon</span>
+        <div class="card-overlay">
+          <span class="card-title">待續</span>
+          <span class="card-sub">敬請期待</span>
+        </div>
+      </a>
+
+      <!-- 08 · 待續 · 深緋同心六邊形 -->
+      <a class="card card-8 reveal d5"
+         href="#"
+         target="_blank" rel="noopener">
+        <div class="pat"></div><div class="spark"></div><div class="arc"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 08 ]</span>
+        <span class="coming-badge">Coming Soon</span>
+        <div class="card-overlay">
+          <span class="card-title">待續</span>
+          <span class="card-sub">敬請期待</span>
         </div>
       </a>
 
@@ -638,7 +771,6 @@ function updateClock() {
   const m = String(now.getMinutes()).padStart(2,'0');
   const s = String(now.getSeconds()).padStart(2,'0');
   document.getElementById('clk-time').textContent = `${h}:${m}:${s}`;
-
   const yr  = now.getFullYear();
   const mon = now.getMonth() + 1;
   const day = now.getDate();
@@ -680,7 +812,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
       glow: big,
       life: 0,
       maxLife: 280 + Math.random() * 400,
-      c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e','#f7d67a','#c084fc','#fbbf24','#ffffff'][Math.random() * 8 | 0],
+      c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e','#f7d67a','#c084fc','#fbbf24','#2dd4bf','#ff6b6b','#ffffff'][Math.random() * 10 | 0],
       wobble: Math.random() * Math.PI * 2,
       wobbleSpeed: (.5 + Math.random()) * .012,
     };
@@ -704,16 +836,18 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
         ? (Math.random() * 9 | 0) + ''
         : String.fromCharCode(0x30A0 + (Math.random() * 96 | 0))
     ),
-    c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e','#c084fc','#fbbf24'][Math.random() * 6 | 0],
+    c: ['#38efff','#c9943a','#ff4d8d','#a3ff6e','#c084fc','#fbbf24','#2dd4bf','#ff6b6b'][Math.random() * 8 | 0],
   }));
 
   const orbs = [
-    { x:.12, y:.22, r:420, c:'rgba(56,239,255,',  a:.018, fx:.00010 },
-    { x:.82, y:.68, r:360, c:'rgba(201,148,58,',  a:.022, fx:-.00008 },
-    { x:.5,  y:.9,  r:280, c:'rgba(255,77,141,',  a:.014, fx:.00006 },
-    { x:.9,  y:.1,  r:220, c:'rgba(163,255,110,', a:.011, fx:-.00013 },
-    { x:.25, y:.75, r:300, c:'rgba(147,51,234,',  a:.013, fx:.00009 },
-    { x:.7,  y:.35, r:240, c:'rgba(217,119,6,',   a:.010, fx:-.00007 },
+    { x:.12, y:.22, r:420, c:'rgba(56,239,255,',   a:.020, fx:.00010 },
+    { x:.82, y:.68, r:360, c:'rgba(201,148,58,',   a:.024, fx:-.00008 },
+    { x:.5,  y:.9,  r:280, c:'rgba(255,77,141,',   a:.016, fx:.00006 },
+    { x:.9,  y:.1,  r:220, c:'rgba(163,255,110,',  a:.013, fx:-.00013 },
+    { x:.25, y:.75, r:300, c:'rgba(147,51,234,',   a:.015, fx:.00009 },
+    { x:.7,  y:.35, r:240, c:'rgba(217,119,6,',    a:.012, fx:-.00007 },
+    { x:.45, y:.5,  r:320, c:'rgba(13,148,136,',   a:.014, fx:.00008 },
+    { x:.15, y:.85, r:260, c:'rgba(220,38,38,',    a:.011, fx:-.00006 },
   ];
 
   function draw() {
@@ -769,8 +903,8 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
       if (p.glow) {
         const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
-        grd.addColorStop(0,  p.c + Math.round(alpha * 255).toString(16).padStart(2,'0'));
-        grd.addColorStop(.4, p.c + Math.round(alpha * .4 * 255).toString(16).padStart(2,'0'));
+        grd.addColorStop(0,  p.c + Math.round(alpha * 255).toString(16).padStart(2,'00'));
+        grd.addColorStop(.4, p.c + Math.round(alpha * .4 * 255).toString(16).padStart(2,'00'));
         grd.addColorStop(1,  p.c + '00');
         ctx.fillStyle = grd;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2); ctx.fill();
@@ -778,7 +912,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
       const px = ((p.x % W) + W) % W;
       ctx.beginPath(); ctx.arc(px, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.c + Math.round(alpha * 255).toString(16).padStart(2, '0');
+      ctx.fillStyle = p.c + Math.round(alpha * 255).toString(16).padStart(2, '00');
       ctx.fill();
 
       if (p.life >= p.maxLife || p.y < -30) {
