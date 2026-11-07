@@ -50,19 +50,21 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .clock-date{font-family:'Noto Serif TC',serif;font-size:.49rem;font-weight:500;letter-spacing:.14em;color:rgba(56,239,255,.5);display:block;margin-top:.25rem;}
 .clock-label{font-family:'Rajdhani',sans-serif;font-size:.36rem;letter-spacing:.3em;color:var(--mute);text-transform:uppercase;display:block;margin-top:.2rem;}
 
-/* ══ GRID ══ 5張卡片：3欄排列、末行自動置中 */
+/* ══ GRID ══ */
 .grid{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;}
 
 /* ══ CARD BASE ══ */
-.card{position:relative;overflow:hidden;border-radius:3px;border:1px solid rgba(255,255,255,0.07);aspect-ratio:16/9;display:block;text-decoration:none;color:inherit;cursor:pointer;isolation:isolate;z-index:1;transition:transform .45s cubic-bezier(.23,1,.32,1),border-color .4s,box-shadow .4s;}
-.card{flex:0 1 calc((100% - 1.5rem)/3);}
+.card{position:relative;overflow:hidden;border-radius:3px;border:1px solid rgba(255,255,255,0.07);aspect-ratio:16/9;display:block;text-decoration:none;color:inherit;cursor:pointer;isolation:isolate;z-index:1;transition:transform .45s cubic-bezier(.23,1,.32,1),border-color .4s,box-shadow .4s;
+  /* 基礎：3 列（下排小卡） */
+  flex:0 1 calc((100% - 1.5rem)/3);
+}
 .card:hover{transform:translateY(-4px) scale(1.012);}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;opacity:0;transition:opacity .45s;z-index:6;}
 .card:hover::before{opacity:1;}
 .card::after{content:'';position:absolute;top:-70%;left:-90%;width:50%;height:240%;transform:skewX(-18deg);transition:left .9s cubic-bezier(.23,1,.32,1);pointer-events:none;z-index:7;}
 .card:hover::after{left:140%;}
 
-/* ══ 隱藏卡片（未來恢復時，把該卡片上的 hidden 類移除即可） ══ */
+/* ══ 隱藏卡片（恢復時把該卡片上的 hidden 類移除即可） ══ */
 .card.hidden{display:none !important;}
 
 /* ════ CARD 1 ════ */
@@ -367,7 +369,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card-11:hover{border-color:rgba(0,255,200,.50);box-shadow:0 16px 40px rgba(0,255,200,.18),inset 0 0 120px rgba(0,180,255,.10);}
 .card-11::before{background:linear-gradient(90deg,transparent,#00ffc8,transparent);}
 .card-11::after{background:linear-gradient(105deg,transparent 20%,rgba(0,255,200,.08) 50%,transparent 80%);}
-/* Matrix rain */
 .card-11 .matrix{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 .card-11 .mrain{position:absolute;top:-100%;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.05em;line-height:1.35;writing-mode:vertical-rl;text-orientation:upright;animation:m-fall linear infinite;color:rgba(0,255,200,.55);text-shadow:0 0 6px rgba(0,255,200,.8);}
 .card-11 .mrain:nth-child(1){left:8%;animation-duration:10s;animation-delay:0s;}
@@ -378,7 +379,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card-11 .mrain:nth-child(6){left:75%;animation-duration:9.5s;animation-delay:2.2s;color:rgba(0,255,200,.40);}
 .card-11 .mrain:nth-child(7){left:88%;animation-duration:11s;animation-delay:3.8s;}
 @keyframes m-fall{0%{top:-100%;opacity:0;}5%{opacity:1;}85%{opacity:.5;}100%{top:110%;opacity:0;}}
-/* Holo rings */
 .card-11 .holo{position:absolute;left:55%;top:50%;transform:translate(-50%,-50%);z-index:2;pointer-events:none;}
 .card-11 .hr{position:absolute;border-radius:50%;border:1px solid rgba(0,255,200,.20);animation:holo-spin linear infinite;}
 .card-11 .hr:nth-child(1){width:100px;height:100px;top:-50px;left:-50px;animation-duration:12s;border-color:rgba(0,255,200,.22);}
@@ -402,7 +402,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card-12:hover{border-color:rgba(255,60,180,.52);box-shadow:0 16px 40px rgba(255,60,180,.20),inset 0 0 120px rgba(120,0,255,.12);}
 .card-12::before{background:linear-gradient(90deg,transparent,#ff3cb4,transparent);}
 .card-12::after{background:linear-gradient(105deg,transparent 20%,rgba(255,60,180,.08) 50%,transparent 80%);}
-/* Plasma burst */
 .card-12 .plasma{position:absolute;right:-30px;top:50%;transform:translateY(-50%);z-index:2;width:140px;height:140px;pointer-events:none;}
 .card-12 .pring{position:absolute;border-radius:50%;border-style:solid;animation:plasma-rotate linear infinite;}
 .card-12 .pring:nth-child(1){inset:0;border-width:1px;border-color:rgba(255,60,180,.30) transparent rgba(120,0,255,.20) transparent;animation-duration:6s;}
@@ -413,7 +412,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card-12 .plasma-core{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
 .card-12 .plasma-core::after{content:'';width:8px;height:8px;border-radius:50%;background:rgba(255,60,180,1);box-shadow:0 0 12px 4px rgba(255,60,180,.7),0 0 24px 8px rgba(120,0,255,.4);animation:plasma-core-pulse 1.8s ease-in-out infinite;}
 @keyframes plasma-core-pulse{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.7);opacity:1;box-shadow:0 0 18px 6px rgba(255,60,180,.9),0 0 36px 12px rgba(120,0,255,.5);}}
-/* Floating sparks */
 .card-12 .psparks{position:absolute;inset:0;z-index:3;pointer-events:none;}
 .card-12 .ps{position:absolute;border-radius:50%;animation:ps-float ease-in-out infinite;}
 .card-12 .ps:nth-child(1){width:3px;height:3px;left:12%;top:22%;background:rgba(255,60,180,1);animation-duration:3.5s;animation-delay:0s;}
@@ -423,7 +421,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card-12 .ps:nth-child(5){width:3px;height:3px;left:8%;top:78%;background:rgba(255,60,180,.9);animation-duration:5s;animation-delay:.3s;}
 .card-12 .ps:nth-child(6){width:1px;height:1px;left:35%;top:15%;background:rgba(180,50,255,1);animation-duration:3.2s;animation-delay:2.5s;}
 @keyframes ps-float{0%{opacity:0;transform:translateY(0) scale(.5);}25%{opacity:1;}75%{opacity:.6;}100%{opacity:0;transform:translateY(-20px) scale(1.4);box-shadow:0 0 6px 2px rgba(255,60,180,.6);}}
-/* Noise texture */
 .card-12 .nmesh{position:absolute;inset:0;z-index:1;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px;}
 .card-12:hover .nmesh{opacity:.20;}
 .card-12 .cor{border-color:rgba(255,60,180,.45);}
@@ -442,10 +439,31 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 .reveal.up{opacity:1;transform:none;}
 .d1{transition-delay:.09s;}.d2{transition-delay:.18s;}.d3{transition-delay:.27s;}.d4{transition-delay:.36s;}.d5{transition-delay:.45s;}.d6{transition-delay:.54s;}
 
-/* ══ RESPONSIVE ══ */
+/* ══ 電腦版：上排 2 大 + 下排 3 小 ══ */
+@media(min-width:901px){
+  /* 第 1、2 張＝重點卡（各佔一半寬度） */
+  .grid > .card:nth-child(-n+2){
+    flex:0 1 calc((100% - .75rem)/2);
+  }
+  /* 重點卡的字級與內距同步放大，強化視覺層級 */
+  .grid > .card:nth-child(-n+2) .card-title{
+    font-size:clamp(1.55rem,2.7vw,2rem);
+    letter-spacing:.07em;
+  }
+  .grid > .card:nth-child(-n+2) .card-sub{
+    font-size:clamp(.92rem,1.35vw,1.08rem);
+  }
+  .grid > .card:nth-child(-n+2) .card-overlay{
+    padding:.95rem 1.05rem .9rem;
+  }
+}
+
+/* ══ 平板 ══ */
 @media(max-width:900px){
   .card{flex:0 1 calc((100% - .75rem)/2);}
 }
+
+/* ══ 手機 ══ */
 @media(max-width:580px){
   header{padding:1rem 1.2rem;}main{padding:2rem 1.2rem 3rem;}footer{padding:1rem 1.2rem;}
   .card{flex:1 1 100%;aspect-ratio:16/9;}
@@ -482,9 +500,9 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 
     <div class="grid">
 
-      <!-- ══════════ 顯示中：5 個 ══════════ -->
+      <!-- ══════════ 顯示中：5 個（前 2 張為電腦版大卡） ══════════ -->
 
-      <!-- 01 台股半導體每日推薦 - 背景: card-1 金色光束 -->
+      <!-- 01 台股半導體每日推薦 - card-1 金色光束（重點卡） -->
       <a class="card card-1 reveal d1" href="https://alltwstock.streamlit.app/" target="_blank" rel="noopener">
         <div class="core"></div><div class="core-inner"></div>
         <div class="beam b1"></div><div class="beam b2"></div><div class="beam b3"></div><div class="beam b4"></div><div class="beam b5"></div>
@@ -497,7 +515,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 02 主動ETF追蹤儀表板 - 背景: card-4 綠色雨滴 -->
+      <!-- 02 主動ETF追蹤儀表板 - card-4 綠色雨滴（重點卡） -->
       <a class="card card-4 reveal d2" href="https://flydav003-alt.github.io/etf/" target="_blank" rel="noopener">
         <div class="pat"></div>
         <div class="rain">
@@ -514,7 +532,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 03 AI即時新聞 - 背景: card-3 雷達 -->
+      <!-- 03 AI即時新聞 - card-3 雷達（小卡） -->
       <a class="card card-3 reveal d3" href="https://davnews.streamlit.app/" target="_blank" rel="noopener">
         <div class="pat"></div>
         <div class="radar-wrap">
@@ -532,7 +550,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 04 半導體熱力圖 - 背景: card-9 aurora -->
+      <!-- 04 半導體熱力圖 - card-9 極光（小卡） -->
       <a class="card card-9 card-coming reveal d4" href="https://davheatmap.streamlit.app/" target="_blank" rel="noopener">
         <div class="aurora"><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div></div>
         <div class="pulse-ring"><div class="pr"></div><div class="pr"></div><div class="pr"></div><div class="pr"></div></div>
@@ -545,7 +563,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 05 美股 - 背景: card-11 (holo rings, 不含數字雨) -->
+      <!-- 05 美股 - card-11 全息環（小卡） -->
       <a class="card card-11 reveal d5" href="https://flydav003-alt.github.io/US/" target="_blank" rel="noopener">
         <div class="holo">
           <div class="hr"></div><div class="hr"></div><div class="hr"></div>
@@ -564,10 +582,11 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
       <!-- ══════════════════════════════════════════════════════════
            以下為【暫時隱藏】的卡片（結構完整保留）
            恢復方式：把該 <a> 上的 "hidden" 類別刪掉即可
-           移除後如果想回到 3 欄自動排列，不需要改任何 CSS
+           注意：恢復後它會排在 DOM 中目前的位置；若想讓它出現在
+                 前兩張大卡的位置，需要手動把該 <a> 區塊移到前面。
            ══════════════════════════════════════════════════════════ -->
 
-      <!-- [隱藏] 綜合K線評分排名與回測 - card-2 cyan掃描線 -->
+      <!-- [隱藏] 綜合K線評分排名與回測 - card-2 青色掃描 -->
       <a class="card card-2 hidden reveal d1" href="https://flydav003-alt.github.io/BT/" target="_blank" rel="noopener">
         <div class="ring"></div>
         <div class="scan">
@@ -597,7 +616,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- [隱藏] 抓大波段回踩上車 - card-10 lava漩渦 -->
+      <!-- [隱藏] 抓大波段回踩上車 - card-10 熔岩漩渦 -->
       <a class="card card-10 card-coming hidden reveal d3" href="https://pullback.streamlit.app/" target="_blank" rel="noopener">
         <div class="lava-glow"></div>
         <div class="vortex"><div class="vring"></div><div class="vring"></div><div class="vring"></div><div class="vring"></div></div>
@@ -610,7 +629,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- [隱藏] Claude每日選股分析 - card-12 plasma -->
+      <!-- [隱藏] Claude每日選股分析 - card-12 電漿 -->
       <a class="card card-12 hidden reveal d4" href="https://flydav003-alt.github.io/Today/" target="_blank" rel="noopener">
         <div class="nmesh"></div>
         <div class="plasma">
@@ -630,7 +649,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- [隱藏] 台股雷達 - card-6 amber波浪 -->
+      <!-- [隱藏] 台股雷達 - card-6 琥珀波浪 -->
       <a class="card card-6 hidden reveal d5" href="https://flydav003-alt.github.io/stock-database/" target="_blank" rel="noopener">
         <div class="waves">
           <div class="wave"></div><div class="wave"></div><div class="wave"></div>
@@ -695,102 +714,4 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         <div class="hex-wrap">
           <div class="hex-ring">
             <svg class="h1" width="90" height="90" viewBox="0 0 90 90"><polygon points="45,3 84,25 84,67 45,89 6,67 6,25" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
-            <svg class="h2" width="66" height="66" viewBox="0 0 66 66"><polygon points="33,2 62,19 62,47 33,64 4,47 4,19" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
-            <svg class="h3" width="42" height="42" viewBox="0 0 42 42"><polygon points="21,2 39,13 39,29 21,40 3,29 3,13" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
-            <svg class="h4" width="20" height="20" viewBox="0 0 20 20"><polygon points="10,1 18,6 18,14 10,19 2,14 2,6" fill="none" stroke="rgba(255,107,107,0.7)" stroke-width="1"/></svg>
-          </div>
-          <div class="hex-core"></div>
-        </div>
-        <div class="arc"></div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 12 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">台股GOGOGO</span>
-          <span class="card-sub">台股 上市股票 短線操作</span>
-        </div>
-      </a>
-
-    </div>
-  </main>
-
-  <footer>
-    <a href="#" class="foot-logo">金融分析</a>
-    <span class="foot">&copy; 2026 · All Systems Operational</span>
-  </footer>
-</div>
-
-<script>
-const DAYS_ZH=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-function updateClock(){
-  const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0'),s=String(now.getSeconds()).padStart(2,'0');
-  document.getElementById('clk-time').textContent=`${h}:${m}:${s}`;
-  document.getElementById('clk-date').textContent=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日　${DAYS_ZH[now.getDay()]}`;
-}
-updateClock();setInterval(updateClock,1000);
-
-const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);}});},{threshold:.04,rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-/* 卡片5 閃電（目前隱藏，恢復顯示後自動運作） */
-(function(){
-  const cv=document.getElementById('lc5');
-  if(!cv)return;
-  const ctx=cv.getContext('2d');
-  function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}
-  resize();
-  const ro=new ResizeObserver(resize);ro.observe(cv);
-  function lightning(x1,y1,x2,y2,depth){
-    if(depth<=0){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();return;}
-    const mx=(x1+x2)/2+(Math.random()-.5)*(Math.hypot(x2-x1,y2-y1)*0.45);
-    const my=(y1+y2)/2+(Math.random()-.5)*(Math.hypot(x2-x1,y2-y1)*0.45);
-    lightning(x1,y1,mx,my,depth-1);
-    lightning(mx,my,x2,y2,depth-1);
-    if(Math.random()<.35){const bx=mx+(Math.random()-.5)*60,by=my+(Math.random()-.5)*60;lightning(mx,my,bx,by,depth-2);}
-  }
-  function flash(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    const W=cv.width,H=cv.height;
-    if(!W||!H)return;
-    const sx=Math.random()*W*.4+W*.1,sy=0;
-    const ex=Math.random()*W*.6+W*.2,ey=H*.7+Math.random()*H*.2;
-    ctx.strokeStyle='rgba(192,132,252,0.85)';ctx.lineWidth=1;
-    ctx.shadowColor='rgba(192,132,252,0.9)';ctx.shadowBlur=6;
-    lightning(sx,sy,ex,ey,4);
-    ctx.shadowBlur=0;
-    setTimeout(()=>ctx.clearRect(0,0,cv.width,cv.height),120);
-  }
-  function scheduleFlash(){setTimeout(()=>{flash();scheduleFlash();},2000+Math.random()*3500);}
-  scheduleFlash();
-})();
-
-/* 背景粒子 */
-(function(){
-  const cv=document.getElementById('bg');
-  const ctx=cv.getContext('2d');
-  let W,H,t=0;
-  const rz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};
-  rz();window.addEventListener('resize',rz);
-  function mkPt(){
-    const big=Math.random()<.12;
-    return{x:Math.random()*W,y:H+Math.random()*200,vx:(Math.random()-.5)*.25,vy:-.18-Math.random()*.55,r:big?2.5+Math.random()*3:.4+Math.random()*1.4,a:big?.06+Math.random()*.10:.015+Math.random()*.055,glow:big,life:0,maxLife:280+Math.random()*400,c:['#38efff','#c9943a','#ff4d8d','#a3ff6e','#f7d67a','#c084fc','#fbbf24','#2dd4bf','#ff6b6b','#a8edff','#ff6a00'][Math.random()*11|0],wobble:Math.random()*Math.PI*2,wobbleSpeed:(.5+Math.random())*.012};
-  }
-  const pts=Array.from({length:130},()=>{const p=mkPt();p.y=Math.random()*(H+200)-200;return p;});
-  const streams=Array.from({length:22},()=>({x:Math.random()*2200,y:Math.random()*-600,sp:.18+Math.random()*.38,op:.005+Math.random()*.008,len:8+(Math.random()*10|0),ch:Array.from({length:20},()=>Math.random()<.45?(Math.random()*9|0)+'':String.fromCharCode(0x30A0+(Math.random()*96|0))),c:['#38efff','#c9943a','#ff4d8d','#a3ff6e','#c084fc','#fbbf24','#2dd4bf','#ff6b6b','#a8edff','#ff6a00'][Math.random()*10|0]}));
-  const orbs=[{x:.12,y:.22,r:420,c:'rgba(56,239,255,',a:.020,fx:.00010},{x:.82,y:.68,r:360,c:'rgba(201,148,58,',a:.024,fx:-.00008},{x:.5,y:.9,r:280,c:'rgba(255,77,141,',a:.016,fx:.00006},{x:.9,y:.1,r:220,c:'rgba(163,255,110,',a:.013,fx:-.00013},{x:.25,y:.75,r:300,c:'rgba(147,51,234,',a:.015,fx:.00009},{x:.7,y:.35,r:240,c:'rgba(217,119,6,',a:.012,fx:-.00007},{x:.45,y:.5,r:320,c:'rgba(13,148,136,',a:.014,fx:.00008},{x:.15,y:.85,r:260,c:'rgba(220,38,38,',a:.011,fx:-.00006},{x:.6,y:.15,r:200,c:'rgba(168,237,255,',a:.010,fx:.00007},{x:.35,y:.6,r:220,c:'rgba(255,106,0,',a:.010,fx:-.00009}];
-  function draw(){
-    ctx.clearRect(0,0,W,H);t+=.016;
-    orbs.forEach(o=>{const ox=(o.x+Math.sin(t*o.fx*80)*.04)*W,oy=(o.y+Math.cos(t*o.fx*60)*.04)*H,g=ctx.createRadialGradient(ox,oy,0,ox,oy,o.r);g.addColorStop(0,o.c+o.a+')');g.addColorStop(.5,o.c+(o.a*.38)+')');g.addColorStop(1,o.c+'0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(ox,oy,o.r,0,Math.PI*2);ctx.fill();});
-    ctx.lineWidth=.3;
-    for(let x=0;x<W;x+=80){ctx.strokeStyle=`rgba(255,255,255,${.003+.003*Math.sin(t*.25+x*.012)})`;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=80){ctx.strokeStyle=`rgba(255,255,255,${.003+.003*Math.cos(t*.25+y*.012)})`;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    ctx.font='8px "Share Tech Mono",monospace';
-    streams.forEach(s=>{for(let i=0;i<s.len;i++){const a=s.op*(1-i/s.len)*(i===0?3:1),hex=Math.min(255,Math.round(a*255)).toString(16).padStart(2,'00');ctx.fillStyle=s.c+hex;ctx.fillText(s.ch[i%s.ch.length],s.x%W,(s.y+i*13)%H);}s.y+=s.sp;if(s.y>H+220){s.y=-240;s.x=Math.random()*W;}});
-    pts.forEach((p,idx)=>{p.life++;p.wobble+=p.wobbleSpeed;p.x+=p.vx+Math.sin(p.wobble)*.18;p.y+=p.vy;const lr=p.life/p.maxLife,fa=lr<.12?lr/.12:lr>.75?1-(lr-.75)/.25:1,alpha=p.a*fa;if(p.glow){const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);grd.addColorStop(0,p.c+Math.round(alpha*255).toString(16).padStart(2,'0'));grd.addColorStop(.4,p.c+Math.round(alpha*.4*255).toString(16).padStart(2,'0'));grd.addColorStop(1,p.c+'00');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2);ctx.fill();}const px=((p.x%W)+W)%W;ctx.beginPath();ctx.arc(px,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+Math.round(alpha*255).toString(16).padStart(2,'0');ctx.fill();if(p.life>=p.maxLife||p.y<-30){pts[idx]=mkPt();}});
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-</script>
-</body>
-</html>
+            <svg class="h2" width="66" height="66" viewBox="0 0 66 66"><polygon points="33,2 62,19 62
