@@ -50,16 +50,20 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .clock-date{font-family:'Noto Serif TC',serif;font-size:.49rem;font-weight:500;letter-spacing:.14em;color:rgba(56,239,255,.5);display:block;margin-top:.25rem;}
 .clock-label{font-family:'Rajdhani',sans-serif;font-size:.36rem;letter-spacing:.3em;color:var(--mute);text-transform:uppercase;display:block;margin-top:.2rem;}
 
-/* ══ GRID ══ 改為3欄，間距縮小 */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
+/* ══ GRID ══ 5張卡片：3欄排列、末行自動置中 */
+.grid{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;}
 
-/* ══ CARD BASE ══ aspect-ratio縮小 */
+/* ══ CARD BASE ══ */
 .card{position:relative;overflow:hidden;border-radius:3px;border:1px solid rgba(255,255,255,0.07);aspect-ratio:16/9;display:block;text-decoration:none;color:inherit;cursor:pointer;isolation:isolate;z-index:1;transition:transform .45s cubic-bezier(.23,1,.32,1),border-color .4s,box-shadow .4s;}
+.card{flex:0 1 calc((100% - 1.5rem)/3);}
 .card:hover{transform:translateY(-4px) scale(1.012);}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;opacity:0;transition:opacity .45s;z-index:6;}
 .card:hover::before{opacity:1;}
 .card::after{content:'';position:absolute;top:-70%;left:-90%;width:50%;height:240%;transform:skewX(-18deg);transition:left .9s cubic-bezier(.23,1,.32,1);pointer-events:none;z-index:7;}
 .card:hover::after{left:140%;}
+
+/* ══ 隱藏卡片（未來恢復時，把該卡片上的 hidden 類移除即可） ══ */
+.card.hidden{display:none !important;}
 
 /* ════ CARD 1 ════ */
 .card-1{background:#07070a;border-color:rgba(247,214,122,0.15);box-shadow:inset 0 0 80px rgba(201,148,58,.08);}
@@ -320,7 +324,7 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 .card:hover .card-num{color:rgba(255,255,255,.35);}
 .coming-badge{position:absolute;top:10px;left:11px;z-index:9;font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.22em;padding:.18rem .5rem;border-radius:2px;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.35);backdrop-filter:blur(6px);text-transform:uppercase;}
 
-/* 卡片文字縮小約1/3 */
+/* 卡片文字 */
 .card-title{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(1.24rem,2.48vw,1.8rem);letter-spacing:.06em;line-height:1.3;color:#fff;display:block;margin-bottom:.225rem;transition:color .35s,text-shadow .4s;}
 .card-sub{font-family:'Share Tech Mono',monospace;font-size:clamp(0.81rem,1.24vw,0.99rem);letter-spacing:.12em;color:rgba(255,255,255,.42);display:block;transition:color .35s,letter-spacing .4s;}
 
@@ -440,12 +444,13 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:900px){
-  .grid{grid-template-columns:repeat(2,1fr);}
+  .card{flex:0 1 calc((100% - .75rem)/2);}
 }
 @media(max-width:580px){
   header{padding:1rem 1.2rem;}main{padding:2rem 1.2rem 3rem;}footer{padding:1rem 1.2rem;}
-  .grid{grid-template-columns:1fr;}.sec-head{flex-direction:column;align-items:flex-start;gap:1rem;}
-  .card{aspect-ratio:16/9;}.header-tag{display:none;}
+  .card{flex:1 1 100%;aspect-ratio:16/9;}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:1rem;}
+  .header-tag{display:none;}
 }
 </style>
 </head>
@@ -477,6 +482,8 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 
     <div class="grid">
 
+      <!-- ══════════ 顯示中：5 個 ══════════ -->
+
       <!-- 01 台股半導體每日推薦 - 背景: card-1 金色光束 -->
       <a class="card card-1 reveal d1" href="https://alltwstock.streamlit.app/" target="_blank" rel="noopener">
         <div class="core"></div><div class="core-inner"></div>
@@ -490,37 +497,8 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 02 綜合K線評分排名與回測 - 背景: card-2 cyan掃描線 -->
-      <a class="card card-2 reveal d2" href="https://flydav003-alt.github.io/BT/" target="_blank" rel="noopener">
-        <div class="ring"></div>
-        <div class="scan">
-          <div class="scan-h"></div><div class="scan-h"></div><div class="scan-h"></div>
-          <div class="scan-v"></div><div class="scan-v"></div>
-          <div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div>
-        </div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 02 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">綜合K線評分</span>
-          <span class="card-sub">ETF上櫃上市美股K線</span>
-        </div>
-      </a>
-
-      <!-- 03 半導體熱力圖 - 背景: card-9 aurora -->
-      <a class="card card-9 card-coming reveal d2" href="https://davheatmap.streamlit.app/" target="_blank" rel="noopener">
-        <div class="aurora"><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div></div>
-        <div class="pulse-ring"><div class="pr"></div><div class="pr"></div><div class="pr"></div><div class="pr"></div></div>
-        <div class="ice-sparks"><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div></div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 03 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">半導體熱力圖</span>
-          <span class="card-sub">台股半導體產業鏈熱力圖</span>
-        </div>
-      </a>
-
-      <!-- 04 主動ETF追蹤儀表板 - 背景: card-4 綠色雨滴 -->
-      <a class="card card-4 reveal d3" href="https://flydav003-alt.github.io/etf/" target="_blank" rel="noopener">
+      <!-- 02 主動ETF追蹤儀表板 - 背景: card-4 綠色雨滴 -->
+      <a class="card card-4 reveal d2" href="https://flydav003-alt.github.io/etf/" target="_blank" rel="noopener">
         <div class="pat"></div>
         <div class="rain">
           <div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>
@@ -529,42 +507,111 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
         <div class="tri"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 04 ]</span>
+        <span class="card-num">[ 02 ]</span>
         <div class="card-overlay">
           <span class="card-title">主動ETF追蹤</span>
           <span class="card-sub">主動式ETF每日追蹤</span>
         </div>
       </a>
 
-      <!-- 05 K線圖-完整分析 - 背景: card-5 紫色閃電 -->
-      <a class="card card-5 reveal d3" href="https://flydav003-alt.github.io/k-line/" target="_blank" rel="noopener">
+      <!-- 03 AI即時新聞 - 背景: card-3 雷達 -->
+      <a class="card card-3 reveal d3" href="https://davnews.streamlit.app/" target="_blank" rel="noopener">
+        <div class="pat"></div>
+        <div class="radar-wrap">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-arm"></div>
+          <div class="blip"></div><div class="blip"></div><div class="blip"></div>
+        </div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 03 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">AI 即時新聞</span>
+          <span class="card-sub">NEWS</span>
+        </div>
+      </a>
+
+      <!-- 04 半導體熱力圖 - 背景: card-9 aurora -->
+      <a class="card card-9 card-coming reveal d4" href="https://davheatmap.streamlit.app/" target="_blank" rel="noopener">
+        <div class="aurora"><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div><div class="aurora-band"></div></div>
+        <div class="pulse-ring"><div class="pr"></div><div class="pr"></div><div class="pr"></div><div class="pr"></div></div>
+        <div class="ice-sparks"><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div><div class="is"></div></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 04 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">半導體熱力圖</span>
+          <span class="card-sub">台股半導體產業鏈熱力圖</span>
+        </div>
+      </a>
+
+      <!-- 05 美股 - 背景: card-11 (holo rings, 不含數字雨) -->
+      <a class="card card-11 reveal d5" href="https://flydav003-alt.github.io/US/" target="_blank" rel="noopener">
+        <div class="holo">
+          <div class="hr"></div><div class="hr"></div><div class="hr"></div>
+          <div class="holo-dot"></div>
+        </div>
+        <div class="glow-line gl1"></div>
+        <div class="glow-line gl2"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 05 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">美股綜合半導體</span>
+          <span class="card-sub">美股半導體相關評分</span>
+        </div>
+      </a>
+
+      <!-- ══════════════════════════════════════════════════════════
+           以下為【暫時隱藏】的卡片（結構完整保留）
+           恢復方式：把該 <a> 上的 "hidden" 類別刪掉即可
+           移除後如果想回到 3 欄自動排列，不需要改任何 CSS
+           ══════════════════════════════════════════════════════════ -->
+
+      <!-- [隱藏] 綜合K線評分排名與回測 - card-2 cyan掃描線 -->
+      <a class="card card-2 hidden reveal d1" href="https://flydav003-alt.github.io/BT/" target="_blank" rel="noopener">
+        <div class="ring"></div>
+        <div class="scan">
+          <div class="scan-h"></div><div class="scan-h"></div><div class="scan-h"></div>
+          <div class="scan-v"></div><div class="scan-v"></div>
+          <div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div>
+        </div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 06 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">綜合K線評分</span>
+          <span class="card-sub">ETF上櫃上市美股K線</span>
+        </div>
+      </a>
+
+      <!-- [隱藏] K線圖-完整分析 - card-5 紫色閃電 -->
+      <a class="card card-5 hidden reveal d2" href="https://flydav003-alt.github.io/k-line/" target="_blank" rel="noopener">
         <div class="pat"></div>
         <div class="orb"></div>
         <canvas class="lightning-canvas" id="lc5"></canvas>
         <div class="dia"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 05 ]</span>
+        <span class="card-num">[ 07 ]</span>
         <div class="card-overlay">
           <span class="card-title">K線圖-完整分析</span>
           <span class="card-sub">K線蠟燭圖分析與進場策略</span>
         </div>
       </a>
 
-      <!-- 06 抓大波段回踩上車 - 背景: card-10 lava漩渦 -->
-      <a class="card card-10 card-coming reveal d4" href="https://pullback.streamlit.app/" target="_blank" rel="noopener">
+      <!-- [隱藏] 抓大波段回踩上車 - card-10 lava漩渦 -->
+      <a class="card card-10 card-coming hidden reveal d3" href="https://pullback.streamlit.app/" target="_blank" rel="noopener">
         <div class="lava-glow"></div>
         <div class="vortex"><div class="vring"></div><div class="vring"></div><div class="vring"></div><div class="vring"></div></div>
         <div class="lava-sparks"><div class="ls"></div><div class="ls"></div><div class="ls"></div><div class="ls"></div><div class="ls"></div><div class="ls"></div></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 06 ]</span>
+        <span class="card-num">[ 08 ]</span>
         <div class="card-overlay">
           <span class="card-title">大波段回踩上車</span>
           <span class="card-sub">抓半導體回踩上車機會</span>
         </div>
       </a>
 
-      <!-- 07 Claude每日選股分析 - 背景: card-12 plasma -->
-      <a class="card card-12 reveal d4" href="https://flydav003-alt.github.io/Today/" target="_blank" rel="noopener">
+      <!-- [隱藏] Claude每日選股分析 - card-12 plasma -->
+      <a class="card card-12 hidden reveal d4" href="https://flydav003-alt.github.io/Today/" target="_blank" rel="noopener">
         <div class="nmesh"></div>
         <div class="plasma">
           <div class="pring"></div><div class="pring"></div>
@@ -576,33 +623,15 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
           <div class="ps"></div><div class="ps"></div><div class="ps"></div>
         </div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 07 ]</span>
+        <span class="card-num">[ 09 ]</span>
         <div class="card-overlay">
           <span class="card-title">Claude分析</span>
           <span class="card-sub">每日AI精選選股</span>
         </div>
       </a>
 
-      <!-- 08 AI即時新聞 - 背景: card-3 雷達 -->
-      <a class="card card-3 reveal d5" href="https://davnews.streamlit.app/" target="_blank" rel="noopener">
-        <div class="pat"></div>
-        <div class="radar-wrap">
-          <div class="radar-circle"></div>
-          <div class="radar-circle"></div>
-          <div class="radar-circle"></div>
-          <div class="radar-arm"></div>
-          <div class="blip"></div><div class="blip"></div><div class="blip"></div>
-        </div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 08 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">AI 即時新聞</span>
-          <span class="card-sub">NEWS</span>
-        </div>
-      </a>
-
-      <!-- 09 台股雷達 - 背景: card-6 amber波浪 -->
-      <a class="card card-6 reveal d5" href="https://flydav003-alt.github.io/stock-database/" target="_blank" rel="noopener">
+      <!-- [隱藏] 台股雷達 - card-6 amber波浪 -->
+      <a class="card card-6 hidden reveal d5" href="https://flydav003-alt.github.io/stock-database/" target="_blank" rel="noopener">
         <div class="waves">
           <div class="wave"></div><div class="wave"></div><div class="wave"></div>
           <div class="wave"></div><div class="wave"></div>
@@ -611,15 +640,15 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
         <div class="fan"></div><div class="beam-a"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 09 ]</span>
+        <span class="card-num">[ 10 ]</span>
         <div class="card-overlay">
           <span class="card-title">台股雷達</span>
           <span class="card-sub">上市櫃短線統計分析</span>
         </div>
       </a>
 
-      <!-- 10 上櫃操盤手 - 背景: card-7 DNA -->
-      <a class="card card-7 reveal d6" href="https://flydav003-alt.github.io/tw-otc/" target="_blank" rel="noopener">
+      <!-- [隱藏] 上櫃操盤手 - card-7 DNA -->
+      <a class="card card-7 hidden reveal d6" href="https://flydav003-alt.github.io/tw-otc/" target="_blank" rel="noopener">
         <div class="orb"></div>
         <div class="dna-wrap">
           <div class="dna-scroll">
@@ -653,15 +682,15 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
         <div class="tick"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 10 ]</span>
+        <span class="card-num">[ 11 ]</span>
         <div class="card-overlay">
           <span class="card-title">上櫃操盤手</span>
           <span class="card-sub">台股上櫃選股分析</span>
         </div>
       </a>
 
-      <!-- 11 台股GOGOGO - 背景: card-8 六角形 -->
-      <a class="card card-8 reveal d1" href="https://flydav003-alt.github.io/tw-tse/" target="_blank" rel="noopener">
+      <!-- [隱藏] 台股GOGOGO - card-8 六角形 -->
+      <a class="card card-8 hidden reveal d6" href="https://flydav003-alt.github.io/tw-tse/" target="_blank" rel="noopener">
         <div class="spark"></div>
         <div class="hex-wrap">
           <div class="hex-ring">
@@ -674,26 +703,11 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
         <div class="arc"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 11 ]</span>
+        <span class="card-num">[ 12 ]</span>
         <div class="card-overlay">
           <span class="card-title">台股GOGOGO</span>
           <span class="card-sub">台股 上市股票 短線操作</span>
         </div>
-      </a>
-
-      <!-- 12 美股 - 背景: card-11 (matrix holo rings, 不含數字雨) -->
-      <a class="card card-11 reveal d2" href="https://flydav003-alt.github.io/US/" target="_blank" rel="noopener">
-        <div class="holo">
-          <div class="hr"></div><div class="hr"></div><div class="hr"></div>
-          <div class="holo-dot"></div>
-        </div>
-        <div class="glow-line gl1"></div>
-        <div class="glow-line gl2"></div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 12 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">美股綜合半導體</span>
-          <span class="card-sub">美股半導體相關評分</span>        </div>
       </a>
 
     </div>
@@ -718,6 +732,7 @@ updateClock();setInterval(updateClock,1000);
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);}});},{threshold:.04,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+/* 卡片5 閃電（目前隱藏，恢復顯示後自動運作） */
 (function(){
   const cv=document.getElementById('lc5');
   if(!cv)return;
@@ -736,6 +751,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   function flash(){
     ctx.clearRect(0,0,cv.width,cv.height);
     const W=cv.width,H=cv.height;
+    if(!W||!H)return;
     const sx=Math.random()*W*.4+W*.1,sy=0;
     const ex=Math.random()*W*.6+W*.2,ey=H*.7+Math.random()*H*.2;
     ctx.strokeStyle='rgba(192,132,252,0.85)';ctx.lineWidth=1;
@@ -748,6 +764,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   scheduleFlash();
 })();
 
+/* 背景粒子 */
 (function(){
   const cv=document.getElementById('bg');
   const ctx=cv.getContext('2d');
@@ -769,7 +786,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     for(let y=0;y<H;y+=80){ctx.strokeStyle=`rgba(255,255,255,${.003+.003*Math.cos(t*.25+y*.012)})`;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
     ctx.font='8px "Share Tech Mono",monospace';
     streams.forEach(s=>{for(let i=0;i<s.len;i++){const a=s.op*(1-i/s.len)*(i===0?3:1),hex=Math.min(255,Math.round(a*255)).toString(16).padStart(2,'00');ctx.fillStyle=s.c+hex;ctx.fillText(s.ch[i%s.ch.length],s.x%W,(s.y+i*13)%H);}s.y+=s.sp;if(s.y>H+220){s.y=-240;s.x=Math.random()*W;}});
-    pts.forEach((p,idx)=>{p.life++;p.wobble+=p.wobbleSpeed;p.x+=p.vx+Math.sin(p.wobble)*.18;p.y+=p.vy;const lr=p.life/p.maxLife,fa=lr<.12?lr/.12:lr>.75?1-(lr-.75)/.25:1,alpha=p.a*fa;if(p.glow){const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);grd.addColorStop(0,p.c+Math.round(alpha*255).toString(16).padStart(2,'00'));grd.addColorStop(.4,p.c+Math.round(alpha*.4*255).toString(16).padStart(2,'00'));grd.addColorStop(1,p.c+'00');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2);ctx.fill();}const px=((p.x%W)+W)%W;ctx.beginPath();ctx.arc(px,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+Math.round(alpha*255).toString(16).padStart(2,'00');ctx.fill();if(p.life>=p.maxLife||p.y<-30){pts[idx]=mkPt();}});
+    pts.forEach((p,idx)=>{p.life++;p.wobble+=p.wobbleSpeed;p.x+=p.vx+Math.sin(p.wobble)*.18;p.y+=p.vy;const lr=p.life/p.maxLife,fa=lr<.12?lr/.12:lr>.75?1-(lr-.75)/.25:1,alpha=p.a*fa;if(p.glow){const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);grd.addColorStop(0,p.c+Math.round(alpha*255).toString(16).padStart(2,'0'));grd.addColorStop(.4,p.c+Math.round(alpha*.4*255).toString(16).padStart(2,'0'));grd.addColorStop(1,p.c+'00');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2);ctx.fill();}const px=((p.x%W)+W)%W;ctx.beginPath();ctx.arc(px,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+Math.round(alpha*255).toString(16).padStart(2,'0');ctx.fill();if(p.life>=p.maxLife||p.y<-30){pts[idx]=mkPt();}});
     requestAnimationFrame(draw);
   }
   draw();
