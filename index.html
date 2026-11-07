@@ -55,7 +55,6 @@ main{flex:1;padding:1.95rem 2.1rem 3rem;max-width:900px;margin:0 auto;width:100%
 
 /* ══ CARD BASE ══ */
 .card{position:relative;overflow:hidden;border-radius:3px;border:1px solid rgba(255,255,255,0.07);aspect-ratio:16/9;display:block;text-decoration:none;color:inherit;cursor:pointer;isolation:isolate;z-index:1;transition:transform .45s cubic-bezier(.23,1,.32,1),border-color .4s,box-shadow .4s;
-  /* 基礎：3 列（下排小卡） */
   flex:0 1 calc((100% - 1.5rem)/3);
 }
 .card:hover{transform:translateY(-4px) scale(1.012);}
@@ -441,11 +440,9 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 
 /* ══ 電腦版：上排 2 大 + 下排 3 小 ══ */
 @media(min-width:901px){
-  /* 第 1、2 張＝重點卡（各佔一半寬度） */
   .grid > .card:nth-child(-n+2){
     flex:0 1 calc((100% - .75rem)/2);
   }
-  /* 重點卡的字級與內距同步放大，強化視覺層級 */
   .grid > .card:nth-child(-n+2) .card-title{
     font-size:clamp(1.55rem,2.7vw,2rem);
     letter-spacing:.07em;
@@ -515,25 +512,8 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 02 主動ETF追蹤儀表板 - card-4 綠色雨滴（重點卡） -->
-      <a class="card card-4 reveal d2" href="https://flydav003-alt.github.io/etf/" target="_blank" rel="noopener">
-        <div class="pat"></div>
-        <div class="rain">
-          <div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>
-          <div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>
-          <div class="rain-drop"></div><div class="rain-drop"></div>
-        </div>
-        <div class="tri"></div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 02 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">主動ETF追蹤</span>
-          <span class="card-sub">主動式ETF每日追蹤</span>
-        </div>
-      </a>
-
-      <!-- 03 AI即時新聞 - card-3 雷達（小卡） -->
-      <a class="card card-3 reveal d3" href="https://davnews.streamlit.app/" target="_blank" rel="noopener">
+      <!-- 02 AI即時新聞 - card-3 雷達（重點卡） -->
+      <a class="card card-3 reveal d2" href="https://davnews.streamlit.app/" target="_blank" rel="noopener">
         <div class="pat"></div>
         <div class="radar-wrap">
           <div class="radar-circle"></div>
@@ -543,10 +523,27 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
           <div class="blip"></div><div class="blip"></div><div class="blip"></div>
         </div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 03 ]</span>
+        <span class="card-num">[ 02 ]</span>
         <div class="card-overlay">
           <span class="card-title">AI 即時新聞</span>
           <span class="card-sub">NEWS</span>
+        </div>
+      </a>
+
+      <!-- 03 主動ETF追蹤儀表板 - card-4 綠色雨滴（小卡） -->
+      <a class="card card-4 reveal d3" href="https://flydav003-alt.github.io/etf/" target="_blank" rel="noopener">
+        <div class="pat"></div>
+        <div class="rain">
+          <div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>
+          <div class="rain-drop"></div><div class="rain-drop"></div><div class="rain-drop"></div>
+          <div class="rain-drop"></div><div class="rain-drop"></div>
+        </div>
+        <div class="tri"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 03 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">主動ETF追蹤</span>
+          <span class="card-sub">主動式ETF每日追蹤</span>
         </div>
       </a>
 
@@ -714,4 +711,102 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         <div class="hex-wrap">
           <div class="hex-ring">
             <svg class="h1" width="90" height="90" viewBox="0 0 90 90"><polygon points="45,3 84,25 84,67 45,89 6,67 6,25" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
-            <svg class="h2" width="66" height="66" viewBox="0 0 66 66"><polygon points="33,2 62,19 62
+            <svg class="h2" width="66" height="66" viewBox="0 0 66 66"><polygon points="33,2 62,19 62,47 33,64 4,47 4,19" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
+            <svg class="h3" width="42" height="42" viewBox="0 0 42 42"><polygon points="21,2 39,13 39,29 21,40 3,29 3,13" fill="none" stroke="rgba(255,107,107,0.6)" stroke-width="0.8"/></svg>
+            <svg class="h4" width="20" height="20" viewBox="0 0 20 20"><polygon points="10,1 18,6 18,14 10,19 2,14 2,6" fill="none" stroke="rgba(255,107,107,0.7)" stroke-width="1"/></svg>
+          </div>
+          <div class="hex-core"></div>
+        </div>
+        <div class="arc"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 12 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">台股GOGOGO</span>
+          <span class="card-sub">台股 上市股票 短線操作</span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <a href="#" class="foot-logo">金融分析</a>
+    <span class="foot">&copy; 2026 · All Systems Operational</span>
+  </footer>
+</div>
+
+<script>
+const DAYS_ZH=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0'),s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clk-time').textContent=`${h}:${m}:${s}`;
+  document.getElementById('clk-date').textContent=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日　${DAYS_ZH[now.getDay()]}`;
+}
+updateClock();setInterval(updateClock,1000);
+
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);}});},{threshold:.04,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* 卡片5 閃電（目前隱藏，恢復顯示後自動運作） */
+(function(){
+  const cv=document.getElementById('lc5');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}
+  resize();
+  const ro=new ResizeObserver(resize);ro.observe(cv);
+  function lightning(x1,y1,x2,y2,depth){
+    if(depth<=0){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();return;}
+    const mx=(x1+x2)/2+(Math.random()-.5)*(Math.hypot(x2-x1,y2-y1)*0.45);
+    const my=(y1+y2)/2+(Math.random()-.5)*(Math.hypot(x2-x1,y2-y1)*0.45);
+    lightning(x1,y1,mx,my,depth-1);
+    lightning(mx,my,x2,y2,depth-1);
+    if(Math.random()<.35){const bx=mx+(Math.random()-.5)*60,by=my+(Math.random()-.5)*60;lightning(mx,my,bx,by,depth-2);}
+  }
+  function flash(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const W=cv.width,H=cv.height;
+    if(!W||!H)return;
+    const sx=Math.random()*W*.4+W*.1,sy=0;
+    const ex=Math.random()*W*.6+W*.2,ey=H*.7+Math.random()*H*.2;
+    ctx.strokeStyle='rgba(192,132,252,0.85)';ctx.lineWidth=1;
+    ctx.shadowColor='rgba(192,132,252,0.9)';ctx.shadowBlur=6;
+    lightning(sx,sy,ex,ey,4);
+    ctx.shadowBlur=0;
+    setTimeout(()=>ctx.clearRect(0,0,cv.width,cv.height),120);
+  }
+  function scheduleFlash(){setTimeout(()=>{flash();scheduleFlash();},2000+Math.random()*3500);}
+  scheduleFlash();
+})();
+
+/* 背景粒子 */
+(function(){
+  const cv=document.getElementById('bg');
+  const ctx=cv.getContext('2d');
+  let W,H,t=0;
+  const rz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};
+  rz();window.addEventListener('resize',rz);
+  function mkPt(){
+    const big=Math.random()<.12;
+    return{x:Math.random()*W,y:H+Math.random()*200,vx:(Math.random()-.5)*.25,vy:-.18-Math.random()*.55,r:big?2.5+Math.random()*3:.4+Math.random()*1.4,a:big?.06+Math.random()*.10:.015+Math.random()*.055,glow:big,life:0,maxLife:280+Math.random()*400,c:['#38efff','#c9943a','#ff4d8d','#a3ff6e','#f7d67a','#c084fc','#fbbf24','#2dd4bf','#ff6b6b','#a8edff','#ff6a00'][Math.random()*11|0],wobble:Math.random()*Math.PI*2,wobbleSpeed:(.5+Math.random())*.012};
+  }
+  const pts=Array.from({length:130},()=>{const p=mkPt();p.y=Math.random()*(H+200)-200;return p;});
+  const streams=Array.from({length:22},()=>({x:Math.random()*2200,y:Math.random()*-600,sp:.18+Math.random()*.38,op:.005+Math.random()*.008,len:8+(Math.random()*10|0),ch:Array.from({length:20},()=>Math.random()<.45?(Math.random()*9|0)+'':String.fromCharCode(0x30A0+(Math.random()*96|0))),c:['#38efff','#c9943a','#ff4d8d','#a3ff6e','#c084fc','#fbbf24','#2dd4bf','#ff6b6b','#a8edff','#ff6a00'][Math.random()*10|0]}));
+  const orbs=[{x:.12,y:.22,r:420,c:'rgba(56,239,255,',a:.020,fx:.00010},{x:.82,y:.68,r:360,c:'rgba(201,148,58,',a:.024,fx:-.00008},{x:.5,y:.9,r:280,c:'rgba(255,77,141,',a:.016,fx:.00006},{x:.9,y:.1,r:220,c:'rgba(163,255,110,',a:.013,fx:-.00013},{x:.25,y:.75,r:300,c:'rgba(147,51,234,',a:.015,fx:.00009},{x:.7,y:.35,r:240,c:'rgba(217,119,6,',a:.012,fx:-.00007},{x:.45,y:.5,r:320,c:'rgba(13,148,136,',a:.014,fx:.00008},{x:.15,y:.85,r:260,c:'rgba(220,38,38,',a:.011,fx:-.00006},{x:.6,y:.15,r:200,c:'rgba(168,237,255,',a:.010,fx:.00007},{x:.35,y:.6,r:220,c:'rgba(255,106,0,',a:.010,fx:-.00009}];
+  function draw(){
+    ctx.clearRect(0,0,W,H);t+=.016;
+    orbs.forEach(o=>{const ox=(o.x+Math.sin(t*o.fx*80)*.04)*W,oy=(o.y+Math.cos(t*o.fx*60)*.04)*H,g=ctx.createRadialGradient(ox,oy,0,ox,oy,o.r);g.addColorStop(0,o.c+o.a+')');g.addColorStop(.5,o.c+(o.a*.38)+')');g.addColorStop(1,o.c+'0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(ox,oy,o.r,0,Math.PI*2);ctx.fill();});
+    ctx.lineWidth=.3;
+    for(let x=0;x<W;x+=80){ctx.strokeStyle=`rgba(255,255,255,${.003+.003*Math.sin(t*.25+x*.012)})`;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=80){ctx.strokeStyle=`rgba(255,255,255,${.003+.003*Math.cos(t*.25+y*.012)})`;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.font='8px "Share Tech Mono",monospace';
+    streams.forEach(s=>{for(let i=0;i<s.len;i++){const a=s.op*(1-i/s.len)*(i===0?3:1),hex=Math.min(255,Math.round(a*255)).toString(16).padStart(2,'00');ctx.fillStyle=s.c+hex;ctx.fillText(s.ch[i%s.ch.length],s.x%W,(s.y+i*13)%H);}s.y+=s.sp;if(s.y>H+220){s.y=-240;s.x=Math.random()*W;}});
+    pts.forEach((p,idx)=>{p.life++;p.wobble+=p.wobbleSpeed;p.x+=p.vx+Math.sin(p.wobble)*.18;p.y+=p.vy;const lr=p.life/p.maxLife,fa=lr<.12?lr/.12:lr>.75?1-(lr-.75)/.25:1,alpha=p.a*fa;if(p.glow){const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);grd.addColorStop(0,p.c+Math.round(alpha*255).toString(16).padStart(2,'0'));grd.addColorStop(.4,p.c+Math.round(alpha*.4*255).toString(16).padStart(2,'0'));grd.addColorStop(1,p.c+'00');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3.5,0,Math.PI*2);ctx.fill();}const px=((p.x%W)+W)%W;ctx.beginPath();ctx.arc(px,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+Math.round(alpha*255).toString(16).padStart(2,'0');ctx.fill();if(p.life>=p.maxLife||p.y<-30){pts[idx]=mkPt();}});
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
