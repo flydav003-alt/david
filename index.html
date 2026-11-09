@@ -438,22 +438,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 .reveal.up{opacity:1;transform:none;}
 .d1{transition-delay:.09s;}.d2{transition-delay:.18s;}.d3{transition-delay:.27s;}.d4{transition-delay:.36s;}.d5{transition-delay:.45s;}.d6{transition-delay:.54s;}
 
-/* ══ 電腦版：上排 2 大 + 下排 3 小 ══ */
-@media(min-width:901px){
-  .grid > .card:nth-child(-n+2){
-    flex:0 1 calc((100% - .75rem)/2);
-  }
-  .grid > .card:nth-child(-n+2) .card-title{
-    font-size:clamp(1.55rem,2.7vw,2rem);
-    letter-spacing:.07em;
-  }
-  .grid > .card:nth-child(-n+2) .card-sub{
-    font-size:clamp(.92rem,1.35vw,1.08rem);
-  }
-  .grid > .card:nth-child(-n+2) .card-overlay{
-    padding:.95rem 1.05rem .9rem;
-  }
-}
+/* ══ 電腦版：6 張統一大小（3×2），由 .card 基本設定決定 ══ */
 
 /* ══ 平板 ══ */
 @media(max-width:900px){
@@ -497,7 +482,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
 
     <div class="grid">
 
-      <!-- ══════════ 顯示中：5 個（前 2 張為電腦版大卡） ══════════ -->
+      <!-- ══════════ 顯示中：6 個（電腦版統一大小 3×2） ══════════ -->
 
       <!-- 01 台股半導體每日推薦 - card-1 金色光束（重點卡） -->
       <a class="card card-1 reveal d1" href="https://alltwstock.streamlit.app/" target="_blank" rel="noopener">
@@ -560,8 +545,22 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         </div>
       </a>
 
-      <!-- 05 美股 - card-11 全息環（小卡） -->
-      <a class="card card-11 reveal d5" href="https://flydav003-alt.github.io/US/" target="_blank" rel="noopener">
+      <!-- 05 K線圖-完整分析 - card-5 紫色閃電 -->
+      <a class="card card-5 reveal d5" href="https://flydav003-alt.github.io/k-line/" target="_blank" rel="noopener">
+        <div class="pat"></div>
+        <div class="orb"></div>
+        <canvas class="lightning-canvas" id="lc5"></canvas>
+        <div class="dia"></div>
+        <span class="cor c-tl"></span><span class="cor c-br"></span>
+        <span class="card-num">[ 05 ]</span>
+        <div class="card-overlay">
+          <span class="card-title">K線圖-完整分析</span>
+          <span class="card-sub">K線蠟燭圖分析與進場策略</span>
+        </div>
+      </a>
+
+      <!-- 06 美股 - card-11 全息環 -->
+      <a class="card card-11 reveal d6" href="https://flydav003-alt.github.io/US/" target="_blank" rel="noopener">
         <div class="holo">
           <div class="hr"></div><div class="hr"></div><div class="hr"></div>
           <div class="holo-dot"></div>
@@ -569,7 +568,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
         <div class="glow-line gl1"></div>
         <div class="glow-line gl2"></div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 05 ]</span>
+        <span class="card-num">[ 06 ]</span>
         <div class="card-overlay">
           <span class="card-title">美股綜合半導體</span>
           <span class="card-sub">美股半導體相關評分</span>
@@ -592,24 +591,10 @@ footer{border-top:1px solid var(--border);padding:1.2rem 2.8rem;display:flex;ali
           <div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div>
         </div>
         <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 06 ]</span>
+        <span class="card-num">[ 07 ]</span>
         <div class="card-overlay">
           <span class="card-title">綜合K線評分</span>
           <span class="card-sub">ETF上櫃上市美股K線</span>
-        </div>
-      </a>
-
-      <!-- [隱藏] K線圖-完整分析 - card-5 紫色閃電 -->
-      <a class="card card-5 hidden reveal d2" href="https://flydav003-alt.github.io/k-line/" target="_blank" rel="noopener">
-        <div class="pat"></div>
-        <div class="orb"></div>
-        <canvas class="lightning-canvas" id="lc5"></canvas>
-        <div class="dia"></div>
-        <span class="cor c-tl"></span><span class="cor c-br"></span>
-        <span class="card-num">[ 07 ]</span>
-        <div class="card-overlay">
-          <span class="card-title">K線圖-完整分析</span>
-          <span class="card-sub">K線蠟燭圖分析與進場策略</span>
         </div>
       </a>
 
@@ -748,7 +733,7 @@ updateClock();setInterval(updateClock,1000);
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);}});},{threshold:.04,rootMargin:'0px 0px -20px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* 卡片5 閃電（目前隱藏，恢復顯示後自動運作） */
+/* 卡片5 閃電 */
 (function(){
   const cv=document.getElementById('lc5');
   if(!cv)return;
